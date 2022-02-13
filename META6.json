@@ -1,0 +1,45 @@
+{
+  "name": "DSL::FiniteStateMachines",
+  "description": "Finite State Machines (FSMs) roles and classes for making conversational agents based on Domain Specific Languages (DSLs).",
+  "version": "0.1.0",
+  "perl": "6.d",
+  "authors": [
+    "Anton Antonov"
+  ],
+  "auth": "github:antononcube",
+  "depends": [
+    "Data::ExampleDatasets",
+    "Data::Generators",
+    "Data::Reshapers",
+    "Data::Summarizers",
+    "DSL::English::DataQueryWorkflows",
+    "DSL::English::DataAcquisitionWorkflows",
+    "DSL::Entity::Metadata",
+    "DSL::Shared"
+  ],
+  "build-depends": [],
+  "test-depends": [],
+  "provides": {
+    "DSL::FiniteStateMachines::FSMish": "lib/DSL/FiniteStateMachines/FSMish.rakumod"
+  },
+  "resources": [
+    "default.Rproj"
+  ],
+  "license": "GPL-3.0-or-later",
+  "tags": [
+    "data",
+    "DSL",
+    "FSM",
+    "finite state machine",
+    "acquisition",
+    "preparation",
+    "metadata",
+    "parser",
+    "interpreter",
+    "monad",
+    "workflow",
+    "pipeline"
+  ],
+  "api": "1",
+  "source-url": "https://github.com/antononcube/Raku-DSL-English-FiniteStateMachines.git"
+}
