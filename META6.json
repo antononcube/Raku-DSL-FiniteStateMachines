@@ -8,19 +8,21 @@
   ],
   "auth": "github:antononcube",
   "depends": [
+    "DSL::English::DataAcquisitionWorkflows",
+    "DSL::English::DataQueryWorkflows",
+    "DSL::Entity::Metadata",
+    "DSL::Shared",
     "Data::ExampleDatasets",
     "Data::Generators",
     "Data::Reshapers",
-    "Data::Summarizers",
-    "DSL::English::DataQueryWorkflows",
-    "DSL::English::DataAcquisitionWorkflows",
-    "DSL::Entity::Metadata",
-    "DSL::Shared"
+    "Data::Summarizers"
   ],
   "build-depends": [],
   "test-depends": [],
   "provides": {
-    "DSL::FiniteStateMachines::FSMish": "lib/DSL/FiniteStateMachines/FSMish.rakumod"
+    "DSL::FiniteStateMachines::FSMish": "lib/DSL/FiniteStateMachines/FSMish.rakumod",
+    "DSL::FiniteStateMachines::QueryRetrieveActFSMRole": "lib/DSL/FiniteStateMachines/QueryRetrieveActFSMRole.rakumod",
+    "DSL::FiniteStateMachines::DataObtainer": "lib/DSL/FiniteStateMachines/DataObtainer.rakumod"
   },
   "resources": [
     "default.Rproj"
