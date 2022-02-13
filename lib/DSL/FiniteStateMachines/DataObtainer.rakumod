@@ -7,10 +7,18 @@ use Data::Reshapers;
 use Text::CSV;
 use XDG::BaseDirectory :terms;
 
+#===========================================================
+# DataObtainer
+#===========================================================
 
-#--------------------------------------------------------
 class DSL::FiniteStateMachines::DataObtainer
         does DSL::FiniteStateMachines::QueryRetrieveActFSMRole {
+
+    #--------------------------------------------------------
+    # Metadata dataset predicate
+    method is-metadata-row( $data ) {
+        return $data ~~ Hash && ($data.keys (&) <Title Rows Cols CSV Doc>).elems == 5;
+    }
 
     #--------------------------------------------------------
     multi method choose-transition(Str $stateID where $_ ~~ 'PrioritizedList',

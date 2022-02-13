@@ -26,12 +26,13 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
     has $.FSMGrammar is rw;
 
     #--------------------------------------------------------
-    method init-dataset() { }
+    method init-dataset() { note 'Not overridden'; }
 
     #--------------------------------------------------------
     # Metadata dataset predicate
     method is-metadata-row( $data ) {
-        return $data ~~ Hash && ($data.keys (&) <Title Rows Cols CSV Doc>).elems == 5;
+        note 'Not overridden';
+        return True;
     }
 
     method is-metadata-dataset( $data ) {
