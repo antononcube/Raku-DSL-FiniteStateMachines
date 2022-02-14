@@ -24,7 +24,7 @@ $abcFSM.ECHOLOGGING = -> *@args {};
 # Run FSM
 #--------------------------------------------------------
 
-#$abcFSM.run('WaitForRequest', ["show summary", "", "group by Rows; show counts", "", "start over", "take last twelve", "", "quit"]);
+#$abcFSM.run('WaitForRequest', ["show summary", "", "group by Position; show counts", "", "start over", "take last twelve", "", "quit"]);
 $abcFSM.run('WaitForRequest');
 
 #if $abcFSM.acquiredData ~~ Array {
