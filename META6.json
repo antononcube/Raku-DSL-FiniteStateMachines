@@ -29,7 +29,7 @@
   "resources": [
     "default.Rproj"
   ],
-  "license": "GPL-3.0-or-later",
+  "license": "Artistic-2.0",
   "tags": [
     "data",
     "DSL",
