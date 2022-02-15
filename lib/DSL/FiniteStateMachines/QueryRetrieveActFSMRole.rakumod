@@ -54,7 +54,7 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
         }
 
         # Check was "global" command was entered. E.g."start over".
-        my $manager = DSL::English::DataAcquisitionWorkflows::Actions::Raku::FSMGrammar.new( object => $!dataset.clone);
+        my $manager = DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers.new( object => $!dataset.clone);
         my $pres = $.FSMGrammar.parse($input, rule => 'TOP', actions => $manager);
 
         &.ECHOLOGGING.("$stateID: Global commad parsing result: ", $pres);
