@@ -23,4 +23,5 @@ role DSL::FiniteStateMachines::AddressBookCaller::AddressBookGrammar {
   token call-verb { 'call' | 'dial' }
   token third-person-singular { 'he' | 'she' }
   token company-noun { 'company' }
+  token put-verb { 'put' }
 }
