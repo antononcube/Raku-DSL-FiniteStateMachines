@@ -268,10 +268,10 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
         self.add-transition("ListOfItems",      "noItems",            "WaitForRequest");
         self.add-transition("ListOfItems",      "uniqueItemObtained", "AcquireItem");
 
-        self.add-transition("AcquireItem",      "acquired",            "ActOnItem");
-        self.add-transition("ActOnItem",        "actedOn",             "Exit");
+        self.add-transition("AcquireItem",      "acquired",           "ActOnItem");
+        self.add-transition("ActOnItem",        "actedOn",            "Exit");
 
-        self.add-transition("Help",             "helpGiven",           "WaitForRequest");
+        self.add-transition("Help",             "helpGiven",          "WaitForRequest");
 
         # Result
         return self;
