@@ -1,7 +1,10 @@
 
 use DSL::FiniteStateMachines::QueryRetrieveActFSMRole;
+use DSL::FiniteStateMachines::AddressBookCaller::FSMGlobalCommand;
 use DSL::FiniteStateMachines::DataObtainer::FSMGlobalCommand;
 use DSL::FiniteStateMachines::AddressBookCaller::Utilities;
+use DSL::FiniteStateMachines::AddressBookCaller::AddressBookGrammar;
+use DSL::FiniteStateMachines::AddressBookCaller::AddressBookActions;
 use Data::Reshapers;
 
 #===========================================================
@@ -15,6 +18,40 @@ class DSL::FiniteStateMachines::AddressBookCaller
     # Metadata dataset predicate
     method is-metadata-row( $data ) {
         return $data ~~ Hash && ($data.keys (&) <Name Company Position Phone Email>).elems == 5;
+    }
+
+    #--------------------------------------------------------
+    multi method choose-transition(Str $stateID where $_ ~~ 'WaitForCallRequest',
+                                   $input is copy = Whatever, UInt $maxLoops = 5 --> Str) {
+
+        # Get next transitions
+        my @transitions = %.states{$stateID}.explicitNext;
+
+        &.ECHOLOGGING.(@transitions.raku.Str);
+
+        # Get input if not given
+        if $input.isa(Whatever) {
+            $input = val get;
+        }
+
+        # Check was "global" command was entered. E.g."start over".
+        my $translator = DSL::FiniteStateMachines::AddressBookCaller::AddressBookActions.new(object => $!dataset.clone);
+        my $pres = DSL::FiniteStateMachines::AddressBookCaller::FSMGlobalCommand.parse($input, rule => 'TOP', actions => $translator);
+
+        &.ECHOLOGGING.("$stateID: Call commad parsing result: ", $pres);
+
+        say $pres<call-command>;
+
+        if $pres<call-command> {
+            my $translatedInput = $pres.made;
+
+            say $translatedInput;
+
+            return self.choose-transition( 'WaitForRequest', $translatedInput, :$maxLoops)
+        } else {
+            return self.choose-transition( 'WaitForRequest', $input, :$maxLoops)
+        }
+
     }
 
     #--------------------------------------------------------
@@ -89,6 +126,9 @@ class DSL::FiniteStateMachines::AddressBookCaller
         self.init-dataset();
 
         self.apply-query-retrieve-act-pattern();
+
+        self.add-state("WaitForCallRequest", -> $obj { say "🔊 PLEASE enter call request."; });
+        self.add-transition("WaitForCallRequest", "startOver", "WaitForRequest");
 
         #--------------------------------------------------------
         # Loggers
