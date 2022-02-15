@@ -1,18 +1,19 @@
 
 class DSL::FiniteStateMachines::AddressBookCaller::AddressBookActions {
+    method TOP($/) { make $/.values[0].made; }
     method call-command($/) { make $/.values[0].made; }
     method call-contact($/) { make $/.values[0].made; }
     method call-spec($/) { make $/.values[0].made; }
     method call-filter($/) { make $/.values[0].made; }
     method contact-spec($/) {
         if $<contact-occupation> && $<call-from-company> {
-            make 'filter by Occupation is ' ~ $<contact-occupation>.made ~ ' and Company is ' ~  $<call-from-company>.made;
+            make 'filter by Position is "' ~ $<contact-occupation>.made ~ '" and Company is "' ~  $<call-from-company>.made ~ '"';
         } elsif $<contact-name> {
-            make 'filter by Name is ' ~ $<contact-name>.made;
+            make 'filter by Name is "' ~ $<contact-name>.made ~ '"';
         } elsif $<call-from-company> {
-            make 'filter by Company is ' ~  $<call-from-company>.made;
+            make 'filter by Company is "' ~  $<call-from-company>.made ~ '"';
         } else {
-            make 'filter by Occupation is ' ~ $<contact-occupation>.made;
+            make 'filter by Position is "' ~ $<contact-occupation>.made ~ '"';
         }
     }
     method call-from-company($/) { make $/.values[0].made }
