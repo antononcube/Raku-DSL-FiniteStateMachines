@@ -24,7 +24,10 @@
     "DSL::FiniteStateMachines::QueryRetrieveActFSMRole": "lib/DSL/FiniteStateMachines/QueryRetrieveActFSMRole.rakumod",
     "DSL::FiniteStateMachines::DataObtainer": "lib/DSL/FiniteStateMachines/DataObtainer.rakumod",
     "DSL::FiniteStateMachines::AddressBookCaller": "lib/DSL/FiniteStateMachines/AddressBookCaller.rakumod",
-    "DSL::FiniteStateMachines::AddressBookCaller::Utilities": "lib/DSL/FiniteStateMachines/AddressBookCaller/Utilities.rakumod"
+    "DSL::FiniteStateMachines::AddressBookCaller::Utilities": "lib/DSL/FiniteStateMachines/AddressBookCaller/Utilities.rakumod",
+    "DSL::FiniteStateMachines::AddressBookCaller::FSMGlobalCommand": "lib/DSL/FiniteStateMachines/AddressBookCaller/FSMGlobalCommand.rakumod",
+    "DSL::FiniteStateMachines::AddressBookCaller::AddressBookGrammar": "lib/DSL/FiniteStateMachines/AddressBookCaller/AddressBookGrammar.rakumod",
+    "DSL::FiniteStateMachines::AddressBookCaller::AddressBookActions": "lib/DSL/FiniteStateMachines/AddressBookCaller/AddressBookActions.rakumod"
   },
   "resources": [
     "default.Rproj"
