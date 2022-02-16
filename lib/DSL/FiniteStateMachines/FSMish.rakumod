@@ -82,6 +82,18 @@ role DSL::FiniteStateMachines::FSMish {
     }
 
     #------------------------------------------------------
+    multi method transition-target(DSL::FiniteStateMachines::Transition @transitions, Str $message) {
+
+        my DSL::FiniteStateMachines::Transition $res = @transitions.first({ $_.id eq $message });
+
+        if not so $res {
+            die "Cannot find transitions for the transition id $message";
+        }
+
+        return $res.to;
+    }
+
+    #------------------------------------------------------
     method run(Str $initID, $inputs is copy = Whatever, UInt $maxLoops = 40) {
 
         # Verify arguments
@@ -118,7 +130,9 @@ role DSL::FiniteStateMachines::FSMish {
             # Execute the action
             $state.action.(self) if so $state;
 
-            if so $state.implicitNext {
+            without $state { die 'no state' }
+
+            if $state and so $state.implicitNext {
                 # Switch with implicit state
 
                 &!ECHOLOGGING( "\t", '$state.implicitNext => ', $state.implicitNext);

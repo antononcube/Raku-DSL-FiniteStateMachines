@@ -44,7 +44,7 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
                                    $input is copy = Whatever, UInt $maxLoops = 5 --> Str) {
 
         # Get next transitions
-        my @transitions = %.states{$stateID}.explicitNext;
+        my DSL::FiniteStateMachines::Transition @transitions = %.states{$stateID}.explicitNext;
 
         &.ECHOLOGGING.(@transitions.raku.Str);
 
@@ -63,7 +63,8 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
 
             &.re-say.("$stateID: Quiting.");
 
-            return 'Exit';
+            # return 'Exit';
+            return self.transition-target(@transitions, 'quit');
 
         } elsif $pres<global-command><global-cancel> {
 
@@ -71,7 +72,8 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
 
             $!dataset = $!initDataset.clone;
 
-            return 'WaitForRequest';
+            # return 'WaitForRequest';
+            return self.transition-target(@transitions, 'startOver');
 
         } elsif $pres<global-command><global-show-all> {
 
@@ -79,25 +81,29 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
             $!itemSpec = $pres;
             $!itemSpecCommand = $input;
 
-            return 'ListOfItems';
+            # return 'ListOfItems';
+            return self.transition-target(@transitions, 'itemSpec');
 
         } elsif $pres<global-command><global-help> {
 
             &.re-say.("$stateID: Help.");
             &.re-say.("$stateID: Type commands for the FSM...");
 
-            return 'WaitForRequest';
+            # return 'WaitForRequest';
+            return self.transition-target(@transitions, 'help');
 
         } elsif $pres<global-command><global-priority-list> {
 
-            return 'PriorityList';
+            # return 'PriorityList';
+            return self.transition-target(@transitions, 'prioritize');
 
         } elsif so $pres<global-command> {
 
             $.re-warn.("$stateID: No implemented reaction for the given service input.");
 
-            # Why not just return 'WaitForRequest' ?
-            return 'WaitForRequest';
+            # return 'WaitForRequest';
+            return self.transition-target(@transitions, 'startOver');
+
         }
 
         &.ECHOLOGGING.("$stateID: Main commad parsing result: ", $pres);
@@ -106,13 +112,16 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
         # Maybe ...
 
         if not so $pres {
-            return 'WaitForRequest';
+            # return 'WaitForRequest';
+            return self.transition-target(@transitions, 'startOver');
         }
 
         # Switch to the next state
         $!itemSpecCommand = $input;
         $!itemSpec = $pres;
-        return 'ListOfItems';
+
+        # return 'ListOfItems';
+        return self.transition-target(@transitions, 'itemSpec');
     }
 
     #--------------------------------------------------------
@@ -120,7 +129,7 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
                                    $input is copy = Whatever, UInt $maxLoops = 5 --> Str) {
 
         # Get next transitions
-        my @transitions = %.states{$stateID}.explicitNext;
+        my DSL::FiniteStateMachines::Transition @transitions = %.states{$stateID}.explicitNext;
 
         &.ECHOLOGGING.(@transitions.raku.Str);
         &.ECHOLOGGING.("$stateID: itemSpec => $!itemSpec");
@@ -128,7 +137,8 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
         if $!itemSpec<global-command><global-show-all> {
 
             &.re-say.(to-pretty-table($!dataset));
-            return "WaitForRequest";
+            # return "WaitForRequest";
+            return self.transition-target(@transitions, 'noChange');
 
         }
 
@@ -149,7 +159,8 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
 
         if $lastDataset eqv $!dataset {
             &.re-say.("$stateID: Pipeline value was not changed.");
-            return 'WaitForRequest';
+            # return 'WaitForRequest';
+            return self.transition-target(@transitions, 'noChange');
         }
 
         &.re-say.("$stateID: Obtained the records:");
@@ -169,21 +180,25 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
             &.re-say.("Empty set was obtained. Reverting to previous value.");
             $!dataset = $lastDataset;
 
-            return 'WaitForRequest';
+            # return 'WaitForRequest';
+            return self.transition-target(@transitions, 'noItems');
 
         } elsif self.is-metadata-row($!dataset) || self.is-metadata-dataset($!dataset) && $!dataset.elems == 1 {
             # One item
 
-            return 'AcquireItem';
+            # return 'AcquireItem';
+            return self.transition-target(@transitions, 'uniqueItemObtained');
 
         } else {
             # Many items
 
-            return 'WaitForRequest';
+            # return 'WaitForRequest';
+            return self.transition-target(@transitions, 'manyItems');
         }
 
-
-        return 'WaitForRequest';
+        # If anything else fails
+        # return 'WaitForRequest';
+        return self.transition-target(@transitions, 'noChange');
     }
 
     #--------------------------------------------------------
@@ -191,7 +206,7 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
                                    $input is copy = Whatever, UInt $maxLoops = 5 --> Str) {
 
         # Get next transitions
-        my @transitions = %.states{$stateID}.explicitNext;
+        my DSL::FiniteStateMachines::Transition @transitions = %.states{$stateID}.explicitNext;
 
         &.ECHOLOGGING.(@transitions.raku.Str);
 
@@ -205,7 +220,7 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
                                    $input is copy = Whatever, UInt $maxLoops = 5 --> Str) {
 
         # Get next transitions
-        my @transitions = %.states{$stateID}.explicitNext;
+        my DSL::FiniteStateMachines::Transition @transitions = %.states{$stateID}.explicitNext;
 
         &.ECHOLOGGING.(@transitions.raku.Str);
 
@@ -229,7 +244,7 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
     #--------------------------------------------------------
     multi method choose-transition(Str $stateID where $_ ~~ 'Help',
                                    $input is copy = Whatever, UInt $maxLoops = 5 --> Str) {
-        return 'None';
+        return 'WaitForRequest';
     }
 
     #--------------------------------------------------------
@@ -258,7 +273,7 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
         #--------------------------------------------------------
         self.add-transition("WaitForRequest",   "itemSpec",           "ListOfItems");
         self.add-transition("WaitForRequest",   "startOver",          "WaitForRequest");
-        self.add-transition("WaitForRequest",   "priority",           "PrioritizedList");
+        self.add-transition("WaitForRequest",   "prioritize",         "PrioritizedList");
         self.add-transition("WaitForRequest",   "help",               "Help");
         self.add-transition("WaitForRequest",   "quit",               "Exit");
 
@@ -266,10 +281,12 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
 
         self.add-transition("ListOfItems",      "manyItems",          "WaitForRequest");
         self.add-transition("ListOfItems",      "noItems",            "WaitForRequest");
+        self.add-transition("ListOfItems",      "noChange",           "WaitForRequest");
         self.add-transition("ListOfItems",      "uniqueItemObtained", "AcquireItem");
 
         self.add-transition("AcquireItem",      "acquired",           "ActOnItem");
-        self.add-transition("ActOnItem",        "actedOn",            "Exit");
+        self.add-transition("ActOnItem",        "stay",               "ActOnItem");
+        self.add-transition("ActOnItem",        "quit",               "Exit");
 
         self.add-transition("Help",             "helpGiven",          "WaitForRequest");
 

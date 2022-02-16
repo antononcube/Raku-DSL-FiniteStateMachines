@@ -25,12 +25,14 @@ class DSL::FiniteStateMachines::DataObtainer
                                    $input is copy = Whatever, UInt $maxLoops = 5 --> Str) {
 
         # Get next transitions
-        my @transitions = %.states{$stateID}.explicitNext;
+        my DSL::FiniteStateMachines::Transition @transitions = %.states{$stateID}.explicitNext;
 
         &.ECHOLOGGING.(@transitions);
 
         &.re-say.(to-pretty-table($.dataset.pick(12)));
-        return 'WaitForRequest';
+
+        # return 'WaitForRequest';
+        return self.transition-target(@transitions, 'priorityListGiven');
     }
 
     #--------------------------------------------------------
@@ -38,7 +40,7 @@ class DSL::FiniteStateMachines::DataObtainer
                                    $input is copy = Whatever, UInt $maxLoops = 5 --> Str) {
 
         # Get next transitions
-        my @transitions = %.states{$stateID}.explicitNext;
+        my DSL::FiniteStateMachines::Transition @transitions = %.states{$stateID}.explicitNext;
 
         &.ECHOLOGGING.(@transitions.raku.Str);
 
@@ -54,12 +56,17 @@ class DSL::FiniteStateMachines::DataObtainer
         $!itemSpec = $!dataset<Package> ~ '::' ~ $!dataset<Item>;
         $!acquiredData = example-dataset( / <{ $query }> $ / ):keep;
 
-        return 'ActOnItem';
+        # return 'ActOnItem';
+        return self.transition-target(@transitions, 'acquired');
     }
 
     #--------------------------------------------------------
     multi method choose-transition(Str $stateID where $_ ~~ 'ActOnItem',
                                    $input is copy = Whatever, UInt $maxLoops = 5 --> Str) {
+
+        # Get next transitions
+        my DSL::FiniteStateMachines::Transition @transitions = %.states{$stateID}.explicitNext;
+
         # Prompt selection menu
         &.re-say.( "Export dataset as [1] R-project, [2] WL-notebook, [3] Raku-package, [4] Microsoft Excel file, or [5] No export\n(choose one...)");
 
@@ -68,7 +75,7 @@ class DSL::FiniteStateMachines::DataObtainer
         loop {
             $n = val get;
             last if $n ~~ Int && $n ~~ 1..5;
-            say "Invalid input; try again.";
+            warn "Invalid input; try again.";
         }
 
         # Compute export names
@@ -113,7 +120,8 @@ class DSL::FiniteStateMachines::DataObtainer
         }
 
         # Goto Exit state or stay
-        return $n < 5 ?? 'ActOnItem' !! 'Exit';
+        # return $n < 5 ?? 'ActOnItem' !! 'Exit';
+        return self.transition-target( @transitions, $n < 5 ?? 'stay' !! 'quit');
     }
 
     #--------------------------------------------------------
