@@ -1,0 +1,25 @@
+#!/usr/bin/env perl6
+
+use DSL::FiniteStateMachines::DataObtainer;
+
+#| Data obtainer Finite State Machine (FSM).
+sub MAIN(
+        *@args #= natural language commands (each command should be in quotes.)
+         ) {
+
+    #| Create FSM object
+    my DSL::FiniteStateMachines::DataObtainer $doFSM .= new;
+
+    $doFSM.make-machine;
+
+    #| Adjust interaction and logging functions
+    $doFSM.re-say = -> *@args { say |@args.map({ '⚙️' ~ $_.Str.subst(:g, "\n", "\n⚙️" )}) };
+    $doFSM.ECHOLOGGING = -> *@args {};
+
+    #| Run FSM
+    if @args.elems > 0 {
+        $doFSM.run('WaitForRequest', @args);
+    } else {
+        $doFSM.run('WaitForRequest');
+    }
+}
