@@ -9,7 +9,6 @@ use DSL::Shared::Roles::English::ListManagementCommand;
 
 use DSL::English::DataQueryWorkflows::Grammar;
 use DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers;
-use DSL::English::DataAcquisitionWorkflows::Actions::Raku::FSMCommand;
 use Lingua::NumericWordForms::Roles::English::WordedNumberSpec;
 
 #--------------------------------------------------------
