@@ -18,6 +18,7 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
     #--------------------------------------------------------
     # This dataset is supposed to be handled by the functions Data::Reshapers
     has $.dataset is rw;
+    has $.datasetColumnNames is rw = Whatever;
     has $.initDataset is rw;
     has $.acquiredData;
     has $.itemSpec;
@@ -135,7 +136,7 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
 
         if $!itemSpec<global-command><global-show-all> {
 
-            &.re-say.(to-pretty-table($!dataset));
+            &.re-say.(to-pretty-table($!dataset, field-names => self.datasetColumnNames));
             # return "WaitForRequest";
             return self.transition-target(@transitions, 'noChange');
 
@@ -169,9 +170,9 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
         say 'self.is-metadata-dataset($!dataset) : ', self.is-metadata-dataset($!dataset);
         )
         if self.is-metadata-row($!dataset) {
-            &.re-say.(to-pretty-table([$!dataset,]))
+            &.re-say.(to-pretty-table([$!dataset,], field-names => self.datasetColumnNames))
         } elsif self.is-metadata-dataset($!dataset) {
-            &.re-say.(to-pretty-table($!dataset));
+            &.re-say.(to-pretty-table($!dataset, field-names => self.datasetColumnNames));
         }
 
         if $!dataset.elems == 0 {
