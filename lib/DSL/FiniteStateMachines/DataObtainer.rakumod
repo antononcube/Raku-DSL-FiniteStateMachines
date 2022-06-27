@@ -29,7 +29,7 @@ class DSL::FiniteStateMachines::DataObtainer
 
         &.ECHOLOGGING.(@transitions);
 
-        &.re-say.(to-pretty-table($.dataset.pick(12)));
+        &.re-say.(to-pretty-table($.dataset.pick(12), field-names => self.datasetColumnNames));
 
         # return 'WaitForRequest';
         return self.transition-target(@transitions, 'priorityListGiven');
@@ -126,8 +126,9 @@ class DSL::FiniteStateMachines::DataObtainer
 
     #--------------------------------------------------------
     method init-dataset() {
-        self.dataset = get-datasets-metadata(deepcopy=>True);
-        self.initDataset = get-datasets-metadata(deepcopy=>True);
+        self.dataset = get-datasets-metadata(:deepcopy);
+        self.initDataset = get-datasets-metadata(:deepcopy);
+        self.datasetColumnNames = <Package Item Title Rows Cols n_binary n_character n_factor n_logical n_numeric CSV Doc>;
     }
 
     #--------------------------------------------------------
