@@ -36,7 +36,7 @@ class DSL::FiniteStateMachines::AddressBookCaller
         }
 
         # Check was "global" command was entered. E.g."start over".
-        my $translator = DSL::FiniteStateMachines::AddressBookCaller::AddressBookActions.new(object => $!dataset.clone);
+        my $translator = DSL::FiniteStateMachines::AddressBookCaller::AddressBookActions.new(object => self.dataset.clone);
 
         my $pres;
         silently {
@@ -67,7 +67,7 @@ class DSL::FiniteStateMachines::AddressBookCaller
 
         &.ECHOLOGGING.(@transitions);
 
-        &.re-say.(to-pretty-table($.dataset.pick(12)));
+        &.re-say.(to-pretty-table($.dataset.pick(12)), field-names => self.datasetColumnNames);
 
         # return 'WaitForRequest';
         return self.transition-target(@transitions, 'priorityListGiven');
@@ -85,11 +85,11 @@ class DSL::FiniteStateMachines::AddressBookCaller
         # The parser/ actions <list-management-command> might produce a table with one row
         # or just the hash corresponding to that row.
         # If the former take the content of the table.
-        if $!dataset ~~ Array {
-            $!dataset = $!dataset.values[0];
+        if self.dataset ~~ Array {
+            self.dataset = self.dataset.values[0];
         }
 
-        &.re-say.("Acquiring contact info for : ", $!dataset<Name>);
+        &.re-say.("Acquiring contact info for : ", self.dataset<Name>);
 
         # return 'ActOnItem';
         return self.transition-target(@transitions, 'acquired');
@@ -114,10 +114,10 @@ class DSL::FiniteStateMachines::AddressBookCaller
         }
 
         given $n {
-            when '1' { self.re-say.( "write email to "     ~ $!dataset<Email> ); }
-            when '2' { self.re-say.( "message by phone "   ~ $!dataset<Phone> ); }
-            when '3' { self.re-say.( "phone call "         ~ $!dataset<Phone> ); }
-            when '4' { self.re-say.( "discord message to " ~ $!dataset<DiscordHandle> ); }
+            when '1' { self.re-say.( "write email to "     ~ self.dataset<Email> ); }
+            when '2' { self.re-say.( "message by phone "   ~ self.dataset<Phone> ); }
+            when '3' { self.re-say.( "phone call "         ~ self.dataset<Phone> ); }
+            when '4' { self.re-say.( "discord message to " ~ self.dataset<DiscordHandle> ); }
         }
 
         # Goto Exit state or stay
