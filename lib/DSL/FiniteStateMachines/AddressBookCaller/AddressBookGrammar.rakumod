@@ -1,14 +1,14 @@
 role DSL::FiniteStateMachines::AddressBookCaller::AddressBookGrammar {
-  rule call-command { <call-contact> | <call-filter> }
+  rule call-command($*resourceObj) { <call-contact> | <call-filter> }
   rule call-contact { <.call-preamble> <contact-spec> | [ <.put-verb> | <.get-verb> ] <contact-spec> [<.on-preposition> <.the-determiner> 'phone']? }
   rule call-preamble { <.call-verb> | 'i' 'wanna' 'talk' <.to-preposition> | <.get-verb> }
   #rule contact-spec { [<.the-determiner> | <.a-determiner>]? <contact-occupation>? <call-from-company>? | <contact-name> | <contact-names-list> | [ 'someone' | <.a-determiner>? 'person' ] <call-from-company> }
   rule contact-spec { [<.the-determiner> | <.a-determiner>]? <contact-occupation> <call-from-company>? | <contact-name> | [ 'someone' | <.a-determiner>? 'person' ] <call-from-company> }
-  token contact-name {\w+}
+  token contact-name { <entity-addressbook-person-name> }
   rule contact-names-list { <contact-name>+ % <.list-separator>}
-  rule company-name { <company-name-part>+ }
+  rule company-name { <entity-addressbook-company-name> }
   token company-name-part {\S+}
-  token contact-occupation {\w+}
+  token contact-occupation {<entity-addressbook-occupation> }
   #rule call-filter {[ <.call-preamble>? [ <call-list-pos-spec> | <call-filter-company> | <call-filter-occupation> [ <call-from-company> ]? | <call-filter-age> | <contact-name> | <contact-names-list> ] ]}
   rule call-filter { <.call-preamble>? [ <call-list-pos-spec> | <call-filter-company> | <call-filter-occupation> [ <call-from-company> ]? | <call-filter-age> | <contact-name> ] }
   rule call-from-company {[ <.from-preposition> | <.of-preposition> ] <.the-determiner>? <.company-noun>? <company-name>}
