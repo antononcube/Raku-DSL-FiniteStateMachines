@@ -24,6 +24,7 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
     has $.itemSpec;
     has $.itemSpecCommand;
     has $.FSMGrammar is rw;
+    has @.grammar-args is rw = ();
 
     #--------------------------------------------------------
     method init-dataset() { note 'Not overridden'; }
@@ -55,7 +56,7 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
 
         # Check was "global" command was entered. E.g."start over".
         my $manager = DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers.new( object => $!dataset.clone);
-        my $pres = $.FSMGrammar.parse($input, rule => 'TOP', actions => $manager);
+        my $pres = $.FSMGrammar.parse($input, rule => 'TOP', actions => $manager, args => self.grammar-args);
 
         &.ECHOLOGGING.("$stateID: Global commad parsing result: ", $pres);
 
