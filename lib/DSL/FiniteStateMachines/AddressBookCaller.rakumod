@@ -40,7 +40,7 @@ class DSL::FiniteStateMachines::AddressBookCaller
 
         my $pres;
         silently {
-            $pres = DSL::FiniteStateMachines::AddressBookCaller::FSMGlobalCommand.parse($input, rule => 'TOP', actions => $translator);
+            $pres = DSL::FiniteStateMachines::AddressBookCaller::FSMGlobalCommand.parse($input, rule => 'TOP', actions => $translator, args => self.grammar-args);
         }
 
         &.ECHOLOGGING.("$stateID: Call commad parsing result: ", $pres);
@@ -132,9 +132,10 @@ class DSL::FiniteStateMachines::AddressBookCaller
     }
 
     #--------------------------------------------------------
-    method make-machine() {
+    method make-machine(@grammar-args = ()) {
         # Initialize attributes
-        self.FSMGrammar = DSL::FiniteStateMachines::DataObtainer::FSMGlobalCommand;
+        self.FSMGrammar = DSL::FiniteStateMachines::AddressBookCaller::FSMGlobalCommand;
+        self.grammar-args = @grammar-args;
         self.init-dataset();
 
         self.apply-query-retrieve-act-pattern();
