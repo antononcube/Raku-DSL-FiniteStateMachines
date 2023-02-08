@@ -1,6 +1,25 @@
+use v6.d;
+
+use DSL::Entity::AddressBook::ResourceAccess;
 
 class DSL::FiniteStateMachines::AddressBookCaller::AddressBookActions {
+
+    ##=====================================================
+    ## General
+    ##=====================================================
+    has Str $.userID is rw;
+
+    has DSL::Entity::AddressBook::ResourceAccess $.resources;
+
+    ##=====================================================
+    ## TOP
+    ##=====================================================
     method TOP($/) { make $/.values[0].made; }
+
+    ##=====================================================
+    ## The rest
+    ##=====================================================
+
     method call-command($/) { make $/.values[0].made; }
     method call-contact($/) { make $/.values[0].made; }
     method call-spec($/) { make $/.values[0].made; }
