@@ -103,21 +103,29 @@ class DSL::FiniteStateMachines::AddressBookCaller
         my DSL::FiniteStateMachines::Transition @transitions = %.states{$stateID}.explicitNext;
 
         # Prompt selection menu
-        &.re-say.( "[1] email, [2] phone message, [3] phone call, [4] discord message, or [5] nothing\n(choose one...)");
+        self.re-say.( "[1] email, [2] phone message, [3] phone call, [4] discord message, or [5] nothing\n(choose one...)");
 
         # Get selection
         my $n;
-        loop {
-            $n = val get;
-            last if $n ~~ Int && $n ~~ 1..5;
-            say "Invalid input; try again.";
+        if $input.isa(Whatever) {
+            loop {
+                $n = val get;
+                last if +$n ~~ Int && +$n ~~ 1..5;
+                say "Invalid input; try again.";
+            }
+        } else {
+            $n = $input;
+            say "Invalid input $input"
+            unless +$n ~~ Int && +$n ~~ 1..5;
         }
 
+        $n = $n.Int;
         given $n {
-            when '1' { self.re-say.( "write email to "     ~ self.dataset<Email> ); }
-            when '2' { self.re-say.( "message by phone "   ~ self.dataset<Phone> ); }
-            when '3' { self.re-say.( "phone call "         ~ self.dataset<Phone> ); }
-            when '4' { self.re-say.( "discord message to " ~ self.dataset<DiscordHandle> ); }
+            when 1 { self.re-say.( "write email to "     ~ self.dataset<Email> ); }
+            when 2 { self.re-say.( "message by phone "   ~ self.dataset<Phone> ); }
+            when 3 { self.re-say.( "phone call "         ~ self.dataset<Phone> ); }
+            when 4 { self.re-say.( "discord message to " ~ self.dataset<DiscordHandle> ); }
+            default { self.re-say.('do nothing'); }
         }
 
         # Goto Exit state or stay
