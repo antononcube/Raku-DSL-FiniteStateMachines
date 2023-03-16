@@ -80,6 +80,11 @@ $abcFSM.run('WaitForCallCommand',
 (2021),
 [GitHub/antononcube](https://github.com/antononcube).
 
+[AAr4] Anton Antonov,
+[DSL::Entity::AddressBook Raku package](https://github.com/antononcube/Raku-DSL-Entity-AddressBook,
+(2023),
+[GitHub/antononcube](https://github.com/antononcube).
+
 ### Videos
 
 [AAv1] Anton Antonov,
