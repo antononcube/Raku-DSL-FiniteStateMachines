@@ -74,7 +74,7 @@ class DSL::FiniteStateMachines::DataObtainer
         my $n;
         loop {
             $n = val get;
-            last if $n ~~ Int && $n ~~ 1..5;
+            last if +$n ~~ Int && +$n ~~ 1..5;
             warn "Invalid input; try again.";
         }
 
