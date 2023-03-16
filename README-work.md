@@ -42,7 +42,7 @@ Here is how the dataset of the create FSM looks like:
 .say for $abcFSM.dataset.pick(3);
 ```
 
-For an *interactive* execution of the FMS we use the command:
+For an *interactive* execution of the FSM we use the command:
 
 ```
 #$abcFSM.run('WaitForCallCommand');
@@ -51,7 +51,12 @@ For an *interactive* execution of the FMS we use the command:
 Here we *run* the FSM with a sequence of commands:
 
 ```perl6
-$abcFSM.run('WaitForCallCommand', ["call an actor from LOTR", "", "take last three", "", "take the second", "", "", "2", "5", "", "quit"]);
+$abcFSM.run('WaitForCallCommand', 
+        ["call an actor from LOTR", "", 
+         "take last three", "", 
+         "take the second", "", "", 
+         "2", "5", "", 
+         "quit"]);
 ```
 
 ------
