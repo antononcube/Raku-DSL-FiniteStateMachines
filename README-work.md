@@ -218,13 +218,13 @@ class DSL_FiniteStateMachines_FSMish {
 }
 ```
 
-(The 
-[UML spec](./docs/UML-class-diagram.puml) and the Mermaid spec above  
-were automatically generated with 
-["UML::Translators"](https://raku.land/zef:antononcube/UML::Translators), [AAp5].)
+(The [UML spec](./docs/UML-class-diagram.puml) and the Mermaid spec above were automatically generated with ["UML::Translators"](https://raku.land/zef:antononcube/UML::Translators), [AAp5].)
 
+Here is the MermaidJS spec generation shell command:
 
-
+```
+to-uml-spec --format=MermaidJS DSL::FiniteStateMachines 
+```
 
 ------
 

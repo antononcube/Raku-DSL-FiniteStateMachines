@@ -44,14 +44,14 @@ $abcFSM.make-machine(($resourceObj,));
 .say for $abcFSM.states;
 ```
 ```
-# WaitForCallCommand => State object < id => WaitForCallCommand, action => -> $obj { #`(Block|2658306062248) ... } >
-# ActOnItem => State object < id => ActOnItem, action => -> $obj { #`(Block|2658306062320) ... } >
-# PrioritizedList => State object < id => PrioritizedList, action => -> $obj { #`(Block|2658306062392) ... } >
-# WaitForRequest => State object < id => WaitForRequest, action => -> $obj { #`(Block|2658306062464) ... } >
-# AcquireItem => State object < id => AcquireItem, action => -> $obj { #`(Block|2658306062536) ... } >
-# ListOfItems => State object < id => ListOfItems, action => -> $obj { #`(Block|2658306062608) ... } >
-# Exit => State object < id => Exit, action => -> $obj { #`(Block|2658306062680) ... } >
-# Help => State object < id => Help, action => -> $obj { #`(Block|2658306062752) ... } >
+# WaitForCallCommand => State object < id => WaitForCallCommand, action => -> $obj { #`(Block|4570571503456) ... } >
+# ListOfItems => State object < id => ListOfItems, action => -> $obj { #`(Block|4570571503528) ... } >
+# Help => State object < id => Help, action => -> $obj { #`(Block|4570571503600) ... } >
+# Exit => State object < id => Exit, action => -> $obj { #`(Block|4570571503672) ... } >
+# PrioritizedList => State object < id => PrioritizedList, action => -> $obj { #`(Block|4570571503744) ... } >
+# AcquireItem => State object < id => AcquireItem, action => -> $obj { #`(Block|4570571503816) ... } >
+# ActOnItem => State object < id => ActOnItem, action => -> $obj { #`(Block|4570571503888) ... } >
+# WaitForRequest => State object < id => WaitForRequest, action => -> $obj { #`(Block|4570571503960) ... } >
 ```
 
 (Each pair shows the name of the state object and the object itself.)
@@ -62,9 +62,9 @@ Here is how the dataset of the create FSM looks like:
 .say for $abcFSM.dataset.pick(3);
 ```
 ```
-# {Company => LOTR, DiscordHandle => orlando.bloom#6219, Email => orlando.bloom.914@gmail.net, Name => Orlando Bloom, Phone => 570-406-4260, Position => actor}
-# {Company => Caribbean Pirates, DiscordHandle => geoffrey.rush#5746, Email => geoffrey.rush1387@gmail.com, Name => Geoffrey Rush, Phone => 797-199-7144, Position => actor}
-# {Company => Caribbean Pirates, DiscordHandle => jerry.bruckheimer#7895, Email => jerry.bruckheimer.438@gmail.net, Name => Jerry Bruckheimer, Phone => 794-128-7138, Position => producer}
+# {Company => X-Men, DiscordHandle => hugh.jackman#1391, Email => hugh.jackman.523@aol.com, Name => Hugh Jackman, Phone => 940-463-2296, Position => actor}
+# {Company => Caribbean Pirates, DiscordHandle => jack.davenport#1324, Email => jack.davenport.152@icloud.net, Name => Jack Davenport, Phone => 627-500-7919, Position => actor}
+# {Company => LOTR, DiscordHandle => robert.shaye#6399, Email => robert.shaye.768@gmail.com, Name => Robert Shaye, Phone => 292-252-6866, Position => producer}
 ```
 
 For an *interactive* execution of the FSM we use the command:
@@ -88,35 +88,35 @@ $abcFSM.run('WaitForCallCommand',
 # filter by Position is "actor" and Company is "LOTR"
 # 🔊 LISTING items.
 # ⚙️ListOfItems: Obtained the records:
-# ⚙️+---------+--------------+----------+-----------------+----------------------+--------------------------------+
-# ⚙️| Company |    Phone     | Position |       Name      |    DiscordHandle     |             Email              |
-# ⚙️+---------+--------------+----------+-----------------+----------------------+--------------------------------+
-# ⚙️|   LOTR  | 408-573-4472 |  actor   |   Andy Serkis   |   andy.serkis#8484   |   andy.serkis.981@gmail.com    |
-# ⚙️|   LOTR  | 321-985-9291 |  actor   |   Elijah Wood   |   elijah.wood#7282   |     elijah.wood.53@aol.com     |
-# ⚙️|   LOTR  | 298-517-5842 |  actor   |   Ian McKellen  |  ian.mckellen#9077   |    ian.mckellen581@aol.com     |
-# ⚙️|   LOTR  | 608-925-5727 |  actor   |    Liv Tyler    |    liv.tyler#8284    |    liv.tyler1177@gmail.com     |
-# ⚙️|   LOTR  | 570-406-4260 |  actor   |  Orlando Bloom  |  orlando.bloom#6219  |  orlando.bloom.914@gmail.net   |
-# ⚙️|   LOTR  | 365-119-3172 |  actor   |    Sean Astin   |   sean.astin#1753    |   sean.astin.1852@gmail.net    |
-# ⚙️|   LOTR  | 287-691-8138 |  actor   | Viggo Mortensen | viggo.mortensen#7157 | viggo.mortensen1293@icloud.com |
-# ⚙️+---------+--------------+----------+-----------------+----------------------+--------------------------------+
+# ⚙️+--------------+-----------------+--------------------------------+----------+---------+----------------------+
+# ⚙️|    Phone     |       Name      |             Email              | Position | Company |    DiscordHandle     |
+# ⚙️+--------------+-----------------+--------------------------------+----------+---------+----------------------+
+# ⚙️| 408-573-4472 |   Andy Serkis   |   andy.serkis.981@gmail.com    |  actor   |   LOTR  |   andy.serkis#8484   |
+# ⚙️| 321-985-9291 |   Elijah Wood   |     elijah.wood.53@aol.com     |  actor   |   LOTR  |   elijah.wood#7282   |
+# ⚙️| 298-517-5842 |   Ian McKellen  |    ian.mckellen581@aol.com     |  actor   |   LOTR  |  ian.mckellen#9077   |
+# ⚙️| 608-925-5727 |    Liv Tyler    |    liv.tyler1177@gmail.com     |  actor   |   LOTR  |    liv.tyler#8284    |
+# ⚙️| 570-406-4260 |  Orlando Bloom  |  orlando.bloom.914@gmail.net   |  actor   |   LOTR  |  orlando.bloom#6219  |
+# ⚙️| 365-119-3172 |    Sean Astin   |   sean.astin.1852@gmail.net    |  actor   |   LOTR  |   sean.astin#1753    |
+# ⚙️| 287-691-8138 | Viggo Mortensen | viggo.mortensen1293@icloud.com |  actor   |   LOTR  | viggo.mortensen#7157 |
+# ⚙️+--------------+-----------------+--------------------------------+----------+---------+----------------------+
 # 🔊 PLEASE enter call request.
 # 🔊 LISTING items.
 # ⚙️ListOfItems: Obtained the records:
-# ⚙️+----------+--------------------------------+----------------------+--------------+-----------------+---------+
-# ⚙️| Position |             Email              |    DiscordHandle     |    Phone     |       Name      | Company |
-# ⚙️+----------+--------------------------------+----------------------+--------------+-----------------+---------+
-# ⚙️|  actor   |  orlando.bloom.914@gmail.net   |  orlando.bloom#6219  | 570-406-4260 |  Orlando Bloom  |   LOTR  |
-# ⚙️|  actor   |   sean.astin.1852@gmail.net    |   sean.astin#1753    | 365-119-3172 |    Sean Astin   |   LOTR  |
-# ⚙️|  actor   | viggo.mortensen1293@icloud.com | viggo.mortensen#7157 | 287-691-8138 | Viggo Mortensen |   LOTR  |
-# ⚙️+----------+--------------------------------+----------------------+--------------+-----------------+---------+
+# ⚙️+--------------+----------------------+----------+-----------------+---------+--------------------------------+
+# ⚙️|    Phone     |    DiscordHandle     | Position |       Name      | Company |             Email              |
+# ⚙️+--------------+----------------------+----------+-----------------+---------+--------------------------------+
+# ⚙️| 570-406-4260 |  orlando.bloom#6219  |  actor   |  Orlando Bloom  |   LOTR  |  orlando.bloom.914@gmail.net   |
+# ⚙️| 365-119-3172 |   sean.astin#1753    |  actor   |    Sean Astin   |   LOTR  |   sean.astin.1852@gmail.net    |
+# ⚙️| 287-691-8138 | viggo.mortensen#7157 |  actor   | Viggo Mortensen |   LOTR  | viggo.mortensen1293@icloud.com |
+# ⚙️+--------------+----------------------+----------+-----------------+---------+--------------------------------+
 # 🔊 PLEASE enter call request.
 # 🔊 LISTING items.
 # ⚙️ListOfItems: Obtained the records:
-# ⚙️+------------+----------+-----------------+--------------+---------+---------------------------+
-# ⚙️|    Name    | Position |  DiscordHandle  |    Phone     | Company |           Email           |
-# ⚙️+------------+----------+-----------------+--------------+---------+---------------------------+
-# ⚙️| Sean Astin |  actor   | sean.astin#1753 | 365-119-3172 |   LOTR  | sean.astin.1852@gmail.net |
-# ⚙️+------------+----------+-----------------+--------------+---------+---------------------------+
+# ⚙️+---------+-----------------+------------+--------------+----------+---------------------------+
+# ⚙️| Company |  DiscordHandle  |    Name    |    Phone     | Position |           Email           |
+# ⚙️+---------+-----------------+------------+--------------+----------+---------------------------+
+# ⚙️|   LOTR  | sean.astin#1753 | Sean Astin | 365-119-3172 |  actor   | sean.astin.1852@gmail.net |
+# ⚙️+---------+-----------------+------------+--------------+----------+---------------------------+
 # 🔊 ACQUIRE item: {Company => LOTR, DiscordHandle => sean.astin#1753, Email => sean.astin.1852@gmail.net, Name => Sean Astin, Phone => 365-119-3172, Position => actor}
 # ⚙️Acquiring contact info for : ⚙️Sean Astin
 # 🔊 ACT ON item: {Company => LOTR, DiscordHandle => sean.astin#1753, Email => sean.astin.1852@gmail.net, Name => Sean Astin, Phone => 365-119-3172, Position => actor}
@@ -285,13 +285,13 @@ class DSL_FiniteStateMachines_FSMish {
 }
 ```
 
-(The 
-[UML spec](./docs/UML-class-diagram.puml) and the Mermaid spec above  
-were automatically generated with 
-["UML::Translators"](https://raku.land/zef:antononcube/UML::Translators), [AAp5].)
+(The [UML spec](./docs/UML-class-diagram.puml) and the Mermaid spec above were automatically generated with ["UML::Translators"](https://raku.land/zef:antononcube/UML::Translators), [AAp5].)
 
+Here is the MermaidJS spec generation shell command:
 
-
+```
+to-uml-spec --format=MermaidJS DSL::FiniteStateMachines 
+```
 
 ------
 
