@@ -34,6 +34,7 @@ class DSL::FiniteStateMachines::AddressBookCaller
         if $input.isa(Whatever) {
             $input = val get;
         }
+        &.re-say.("Input: ", $input.raku.Str);
 
         # Check was "global" command was entered. E.g."start over".
         my $translator = DSL::FiniteStateMachines::AddressBookCaller::AddressBookActions.new(object => self.dataset.clone);
@@ -118,6 +119,7 @@ class DSL::FiniteStateMachines::AddressBookCaller
             say "Invalid input $input"
             unless +$n ~~ Int && +$n ~~ 1..5;
         }
+        self.re-say.("Input: ", $input.raku.Str);
 
         $n = $n.Int;
         given $n {
