@@ -72,51 +72,63 @@ class DSL::FiniteStateMachines::DataObtainer
 
         # Get selection
         my $n;
-        loop {
-            $n = val get;
-            last if +$n ~~ Int && +$n ~~ 1..5;
-            warn "Invalid input; try again.";
+        if $input.isa(Whatever) {
+            loop {
+                $n = val get;
+                last if +$n ~~ Int && +$n ~~ 1..5;
+                say "Invalid input; try again.";
+            }
+        } else {
+            $n = $input;
+            say "Invalid input $input"
+            unless +$n ~~ Int && +$n ~~ 1..5;
         }
+        self.re-say.("Input: ", $input.raku.Str);
 
         # Compute export names
         my $dateTimeSuffix = DateTime.now(formatter => { sprintf "%04d-%02d-%02dT%02d-%02d-%02d", .year, .month, .day, .hour, .minute, .second }).Str;
         my $projName = $!itemSpec.subst('::','-') ~ $dateTimeSuffix;
 
         # Export actions
-        if $n == 1 {
-            # R-project is selected
-            my $dirName = data-home.Str ~ '/DataAcquisitionFSM/rstudio';
-            $dirName ~= '/' ~ $projName;
+        given $n {
+            when 1 {
+                # R-project is selected
+                my $dirName = data-home.Str ~ '/DataAcquisitionFSM/rstudio';
+                $dirName ~= '/' ~ $projName;
 
-            # Create the package
-            shell "mkdir -p $dirName";
-            shell "R -e 'usethis::create_project(path=\"$dirName\")'";
+                # Create the package
+                shell "mkdir -p $dirName";
+                shell "R -e 'usethis::create_project(path=\"$dirName\")'";
 
-            # Put in the data
-            shell "mkdir $dirName/data";
-            my $rproj = slurp %?RESOURCES<default.Rproj>;
-            csv(in => $!acquiredData, out => "$dirName/data/dataset.csv", sep => ',');
+                # Put in the data
+                shell "mkdir $dirName/data";
+                my $rproj = slurp %?RESOURCES<default.Rproj>;
+                csv(in => $!acquiredData, out => "$dirName/data/dataset.csv", sep => ',');
 
-            # Copy the R-project files
-            spurt("$dirName/$projName.Rproj", $rproj);
+                # Copy the R-project files
+                spurt("$dirName/$projName.Rproj", $rproj);
 
-            # Open
-            shell "open $dirName/$projName.Rproj"
+                # Open
+                shell "open $dirName/$projName.Rproj"
+            }
 
-        } elsif $n == 4 {
-            # Microsoft Excel is selected
+            when 4 {
+                # Microsoft Excel is selected
 
-            my $dirName = data-home.Str ~ '/DataAcquisitionFSM/MSExcel';
-            $dirName ~= '/' ~ $projName;
+                my $dirName = data-home.Str ~ '/DataAcquisitionFSM/MSExcel';
+                $dirName ~= '/' ~ $projName;
 
-            # Create the package
-            shell "mkdir -p $dirName";
+                # Create the package
+                shell "mkdir -p $dirName";
 
-            # Put in the data
-            csv(in => $!acquiredData, out => "$dirName/$projName.csv", sep => ',');
+                # Put in the data
+                csv(in => $!acquiredData, out => "$dirName/$projName.csv", sep => ',');
 
-            # Open
-            shell "open $dirName/$projName.csv"
+                # Open
+                shell "open $dirName/$projName.csv"
+            }
+
+            default { self.re-say.('do nothing'); }
         }
 
         # Goto Exit state or stay
