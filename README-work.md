@@ -40,6 +40,12 @@ $abcFSM.make-machine(($resourceObj,));
 
 (Each pair shows the name of the state object and the object itself.)
 
+Here is the graph of FSM's state transition:
+
+```perl6, output.prompt=NONE, output-lang=mermaid
+$abcFSM.to-mermaid-js
+```
+
 Here is how the dataset of the create FSM looks like:
 
 ```perl6
