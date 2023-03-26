@@ -43,7 +43,7 @@
 ** TODO Actions [25%] [1/4]
 - [X] Implement MS Excel action
 - [ ] Implement data transfer by file copying
-  - At first a second call to Text::CSV::csv is/was utilized.
+  - At first a second call to ~Text::CSV::csv~ is/was utilized.
 - [ ] Implement Mathematica Wolfram Function Repository (WFR) creation action
 - [ ] Implement Google Cloud Platform (GCP) notebook creation action
   - Using GCP's Command Line Interfaces (CLI) for management of notebooks.
@@ -69,7 +69,7 @@
 - The wrangled data is saved in temp variables, so joins can be made.
 - The data wrangling history of commands has to be saved, so it can be used for making unit test for the exported dataset.
 ** TODO Come up with unit tests for the whole workflow
-* TODO ~Raku::DSL::FiniteStateMachines::AddressBookCaller~ [33%] [1/3]
+* TODO ~Raku::DSL::FiniteStateMachines::AddressBookCaller~ [66%] [2/3]
 ** DONE Refactor core roles
 - The core roles had to be refactored in order to be to extend the FSM graphs in descendant classes:
   - [X] ~DSL::FiniteStateMachines::FSMish~
@@ -86,10 +86,10 @@
     - [[https://mathematicaforprediction.wordpress.com/2017/07/12/phone-dialing-conversational-agent/]["Phone dialing conversational agent"]] at WordPress
 - [ ] Make the grammars "understand" human names and company names
   - See the ~DSL::Entity~ refactoring described above.
-** TODO Implement Phone-call commands actions [0%] [0/3]
-- [ ] Translate the commands into DSL English commands
-- [ ] Composite commands
+** DONE Implement Phone-call commands actions [100%] [3/3]
+- [X] Translate the commands into DSL English commands
+- [X] Composite commands
   : call an actor from LOTR
-- [ ] Simple commands
+- [X] Simple commands
   : call a producer
   : the third one
