@@ -39,6 +39,38 @@ class DSL::FiniteStateMachines::State {
             'Nothing'
         }
     }
+
+    method to-mermaid-js(:$arrow is copy = Whatever , :$node-shape is copy = Whatever, Bool :$quoted = False) {
+
+        if $arrow !~~ Str { $arrow = '-->'; }
+        if $node-shape !~~ Str { $node-shape = 'rectangle'; }
+
+        my ($lb, $rb);
+        given $node-shape {
+            when $_.lc ∈ <round round-rectangle> {
+                $lb = '(['; $rb = '])';
+            }
+            when $_.lc ∈ <circle disc ●> {
+                $lb = '(('; $rb = '))';
+            }
+            default {
+                $lb = ''; $rb = '';
+            }
+        }
+
+        if $quoted { $lb = $lb ~ '"'; $rb = '"' ~ $rb; }
+
+        if $.explicitNext {
+            my @res = do for @!explicitNext -> $tr {
+                "$lb$!id$rb $arrow |{$tr.id}|$lb$($tr.to)$rb";
+            }
+            @res.join("\n\t")
+        } elsif $.implicitNext {
+            "$lb$!id$rb $arrow $lb$($.implicitNext)$rb";
+        } else {
+            ''
+        }
+    }
 }
 
 #-----------------------------------------------------------
@@ -240,6 +272,10 @@ role DSL::FiniteStateMachines::FSMish {
     }
 
     method to-wl() {
-        return "List[{%.states.values>>.to-wl.join(',')}]"
+        return "List[{%.states.values>>.to-wl.join(',')}]";
+    }
+
+    method to-mermaid-js(*%args) {
+        return "graph TD\n\t{%.states.values>>.to-mermaid-js(|%args).join("\n\t")}";
     }
 }
