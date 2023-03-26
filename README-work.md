@@ -28,13 +28,17 @@ Here we obtain a resource object to access a (particular) address book:
 my $resourceObj = DSL::Entity::AddressBook::resource-access-object();
 ```
 
-Here we create the FSM:
+Here we create the FSM and show its states:
 
 ```perl6
 my DSL::FiniteStateMachines::AddressBookCaller $abcFSM .= new;
 
 $abcFSM.make-machine(($resourceObj,));
+
+.say for $abcFSM.states;
 ```
+
+(Each pair shows the name of the state object and the object itself.)
 
 Here is how the dataset of the create FSM looks like:
 
@@ -65,9 +69,162 @@ $abcFSM.run('WaitForCallCommand',
 
 Here is the Unified Modeling Language (UML) diagram corresponding to the classes in this package:
 
-![](./docs/UML-class-diagram.png)
+```mermaid
+classDiagram
+class DSL_FiniteStateMachines_DataObtainer {
+  +$!FSMGrammar
+  +$!acquiredData
+  +$!currentStateID
+  +$!dataset
+  +$!datasetColumnNames
+  +$!initDataset
+  +$!itemSpec
+  +$!itemSpecCommand
+  +%!states
+  +&!ECHOLOGGING
+  +&!choose-transition
+  +&!re-say
+  +&!re-warn
+  +@!grammar-args
+  +BUILDALL()
+  +ECHOLOGGING()
+  +FSMGrammar()
+  +acquiredData()
+  +add-state()
+  +add-transition()
+  +apply-query-retrieve-act-pattern()
+  +choose-transition()
+  +currentStateID()
+  +dataset()
+  +datasetColumnNames()
+  +grammar-args()
+  +init-dataset()
+  +initDataset()
+  +is-metadata-dataset()
+  +is-metadata-row()
+  +itemSpec()
+  +itemSpecCommand()
+  +make-machine()
+  +re-say()
+  +re-warn()
+  +run()
+  +states()
+  +to-wl()
+  +transition-target()
+}
+DSL_FiniteStateMachines_DataObtainer --|> DSL_FiniteStateMachines_FSMish
+DSL_FiniteStateMachines_DataObtainer --|> DSL_FiniteStateMachines_QueryRetrieveActFSMRole
 
-(The [UML spec](./docs/UML-class-diagram.puml) was automatically generated with ["UML::Translators"](https://raku.land/?q=UML%3A%3ATranslators), [AAp5].)
+
+class DSL_FiniteStateMachines_State {
+  +$!id
+  +$!implicitNext
+  +&!action
+  +@!explicitNext
+  +BUILDALL()
+  +Str()
+  +action()
+  +explicitNext()
+  +gist()
+  +id()
+  +implicitNext()
+  +to-wl()
+}
+
+class DSL_FiniteStateMachines_Transition {
+  +$!id
+  +$!to
+  +BUILDALL()
+  +Str()
+  +gist()
+  +id()
+  +to()
+}
+
+class DSL_FiniteStateMachines_QueryRetrieveActFSMRole {
+  <<role>>
+  +$!FSMGrammar
+  +$!acquiredData
+  +$!dataset
+  +$!datasetColumnNames
+  +$!initDataset
+  +$!itemSpec
+  +$!itemSpecCommand
+  +@!grammar-args
+  +apply-query-retrieve-act-pattern()
+  +init-dataset()
+  +is-metadata-dataset()
+  +is-metadata-row()
+}
+DSL_FiniteStateMachines_QueryRetrieveActFSMRole --|> DSL_FiniteStateMachines_FSMish
+
+
+class DSL_FiniteStateMachines_AddressBookCaller {
+  +$!FSMGrammar
+  +$!acquiredData
+  +$!currentStateID
+  +$!dataset
+  +$!datasetColumnNames
+  +$!initDataset
+  +$!itemSpec
+  +$!itemSpecCommand
+  +%!states
+  +&!ECHOLOGGING
+  +&!choose-transition
+  +&!re-say
+  +&!re-warn
+  +@!grammar-args
+  +BUILDALL()
+  +ECHOLOGGING()
+  +FSMGrammar()
+  +acquiredData()
+  +add-state()
+  +add-transition()
+  +apply-query-retrieve-act-pattern()
+  +choose-transition()
+  +currentStateID()
+  +dataset()
+  +datasetColumnNames()
+  +grammar-args()
+  +init-dataset()
+  +initDataset()
+  +is-metadata-dataset()
+  +is-metadata-row()
+  +itemSpec()
+  +itemSpecCommand()
+  +make-machine()
+  +re-say()
+  +re-warn()
+  +run()
+  +states()
+  +to-wl()
+  +transition-target()
+}
+DSL_FiniteStateMachines_AddressBookCaller --|> DSL_FiniteStateMachines_FSMish
+DSL_FiniteStateMachines_AddressBookCaller --|> DSL_FiniteStateMachines_QueryRetrieveActFSMRole
+
+
+class DSL_FiniteStateMachines_FSMish {
+  <<role>>
+  +$!currentStateID
+  +%!states
+  +&!ECHOLOGGING
+  +&!choose-transition
+  +&!re-say
+  +&!re-warn
+  +add-state()
+  +run()
+  +to-wl()
+}
+```
+
+(The 
+[UML spec](./docs/UML-class-diagram.puml) and the Mermaid spec above  
+were automatically generated with 
+["UML::Translators"](https://raku.land/zef:antononcube/UML::Translators), [AAp5].)
+
+
+
 
 ------
 
@@ -91,12 +248,12 @@ Here is the Unified Modeling Language (UML) diagram corresponding to the classes
 [GitHub/antononcube](https://github.com/antononcube).
 
 [AAp4] Anton Antonov,
-[DSL::Entity::AddressBook Raku package](https://github.com/antononcube/Raku-DSL-Entity-AddressBook,
+[DSL::Entity::AddressBook Raku package](https://github.com/antononcube/Raku-DSL-Entity-AddressBook),
 (2023),
 [GitHub/antononcube](https://github.com/antononcube).
 
 [AAp5] Anton Antonov,
-[UML::Translators Raku package](https://github.com/antononcube/Raku-UML-Translators,
+[UML::Translators Raku package](https://github.com/antononcube/Raku-UML-Translators),
 (2021),
 [GitHub/antononcube](https://github.com/antononcube).
 
