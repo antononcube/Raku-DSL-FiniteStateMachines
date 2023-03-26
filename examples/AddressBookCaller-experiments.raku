@@ -1,5 +1,7 @@
 #!/usr/bin/env perl6
 
+use lib <. /lib>;
+
 use DSL::FiniteStateMachines::AddressBookCaller;
 
 use DSL::Entity::AddressBook;
@@ -17,6 +19,16 @@ $abcFSM.make-machine(($resourceObj,));
 
 # Show dataset sample
 #.say for $abcFSM.dataset.head(3);
+
+#--------------------------------------------------------
+# Show state transitions
+#--------------------------------------------------------
+
+# WL
+#say $abcFSM.to-wl;
+
+# Mermaid
+#say $abcFSM.to-mermaid-js(arrow => '--->');
 
 #--------------------------------------------------------
 # Adjust interaction and logging functions
