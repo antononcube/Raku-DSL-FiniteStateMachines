@@ -51,7 +51,7 @@ class DSL::FiniteStateMachines::AddressBookCaller
         if $pres<call-command> {
             my $translatedInput = $pres.made;
 
-            say $translatedInput;
+            self.re-say.("Translated input: ", $translatedInput);
 
             return self.choose-transition( self.transition-target(@transitions, 'translated'), $translatedInput, :$maxLoops)
         }
