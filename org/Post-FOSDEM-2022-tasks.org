@@ -1,0 +1,95 @@
+#+TITLE: Post FOSDEM 2022 tasks
+#+AUTHOR: Anton Antonov, RakuForPrediction at GitHub
+#+EMAIL: antononcube@posteo.net
+#+TODO: TODO ONGOING MAYBE | DONE CANCELED 
+#+OPTIONS: toc:1 num:0
+
+* TODO Refactor FSM code [100%] [4/4]
+** DONE Make a separate FSM repository
+- See [[https://github.com/antononcube/Raku-DSL-FiniteStateMachines][Raku::DSL::FiniteStateMachines]]
+** DONE Come up a reasonable with package / OOP design
+- examples  
+- lib  
+  - DSL 
+    - FiniteStateMachines  
+      - FSMish  
+      - QueryRetrieveActFSMRole  
+      - AddressBookCaller  
+      - DataObtainer  
+      - ProjectObtainer  
+      - Cro  
+        - DataObtainer    
+- t
+** DONE Re-implement the classes
+** DONE Re-make the unit tests
+* DONE Put notices on the FOSDEM 2022 code [100%] [2/2]
+** DONE ~DSL::Shared~
+** DONE ~DSL::English::DataAcquisition~
+* TODO Delete the obsolete codes
+* DONE Refactor, simplify, speed-up resource access classes [%] [/]
+** DONE Re-implement resource access through a Raku role
+- There is a better way to make those resource access classes using a Raku role.
+  - That allows the use of BEGIN which provides faster loading.
+** TODO Refactor the ~DSL::Entity::*~ packages [60%] [3/5]
+- [X] ~DSL::Entity::Metadata~
+- [X] ~DSL::Entity::Jobs~
+- [X] ~DSL::Entity::Geographics~
+- [ ] ~DSL::Entity::Foods~
+- [ ] ~DSL::Entity::Chemicals~
+* TODO ~Raku::DSL::FiniteStateMachines::DataObtainer~ [16%] [1/6]
+** DONE Core functionalities
+  - As presented in FOSDEM 2022.
+  - See [[https://www.youtube.com/watch?v=3OUkSa-5vEk&t=2500s][FOSDEM2022 Multi language Data Wrangling and Acquisition Conversational Agents (in Raku)]]
+** TODO Actions [25%] [1/4]
+- [X] Implement MS Excel action
+- [ ] Implement data transfer by file copying
+  - At first a second call to Text::CSV::csv is/was utilized.
+- [ ] Implement Mathematica Wolfram Function Repository (WFR) creation action
+- [ ] Implement Google Cloud Platform (GCP) notebook creation action
+  - Using GCP's Command Line Interfaces (CLI) for management of notebooks.
+** TODO Query mechanism
+- [ ] Implement / include the reaction to search queries
+  - For example
+    : Rows:12 -Cols:20 "Air"
+** TODO Inclusion of random data generation commands
+** TODO Implement generated random data export [0%] [0/3]
+- [ ] Notebooks
+- [ ] Projects
+- [ ] etc.
+** TODO Implement data help generation [%] [/]
+- [ ] Install ~lynx~
+- [ ] Implement R-DOC files ingestion 
+- [ ] Implement Roxygen help page code generation
+- [ ] Hook-up with RStudio project
+- [ ] Implement Mathematica WFR notebook description generation
+- [ ] Hook-up with WFR notebook
+* TODO ~Raku::DSL::FiniteStateMachines::DataObtainer~ 2nd wave [0%] [0/3]
+** TODO Come up with names and OOP design
+** TODO Inclusion of data wrangling commands results
+- The wrangled data is saved in temp variables, so joins can be made.
+- The data wrangling history of commands has to be saved, so it can be used for making unit test for the exported dataset.
+** TODO Come up with unit tests for the whole workflow
+* TODO ~Raku::DSL::FiniteStateMachines::AddressBookCaller~ [33%] [1/3]
+** DONE Refactor core roles
+- The core roles had to be refactored in order to be to extend the FSM graphs in descendant classes:
+  - [X] ~DSL::FiniteStateMachines::FSMish~
+  - [X] ~DSL::FiniteStateMachines::QueryRetrieveActFSMRole~
+- The main conclusion for the refactoring was:
+  - The ~choose-transition~ methods should not use hard coded states as return values.
+  - The return values (states) have to be concluded / retrieved through messages.
+  - In this way the graph extensions become possible and easy.
+** TODO Implement Phone-call commands grammar [50%] [1/2]
+- [X] Initial version corresponds to the Mathematica grammar from 2011/2017. 
+  - See:
+    - [[https://github.com/antononcube/ConversationalAgents/blob/master/EBNF/English/Mathematica/PhoneCallingDialogs.ebnf][PhoneCalling.ebnf]] at GitHub
+    - [[https://github.com/antononcube/ConversationalAgents/blob/master/Projects/PhoneDialingDialogsAgent/README.md]["Phone Dialing Dialogs Conversational Agent"]] at GitHub
+    - [[https://mathematicaforprediction.wordpress.com/2017/07/12/phone-dialing-conversational-agent/]["Phone dialing conversational agent"]] at WordPress
+- [ ] Make the grammars "understand" human names and company names
+  - See the ~DSL::Entity~ refactoring described above.
+** TODO Implement Phone-call commands actions [0%] [0/3]
+- [ ] Translate the commands into DSL English commands
+- [ ] Composite commands
+  : call an actor from LOTR
+- [ ] Simple commands
+  : call a producer
+  : the third one
