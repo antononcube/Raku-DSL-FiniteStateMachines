@@ -6,16 +6,16 @@
   "authors": [
     "Anton Antonov"
   ],
-  "auth": "github:antononcube",
+  "auth": "zef:antononcube",
   "depends": [
-    "DSL::English::DataAcquisitionWorkflows",
-    "DSL::English::DataQueryWorkflows",
-    "DSL::Entity::Metadata",
-    "DSL::Shared",
-    "Data::ExampleDatasets",
-    "Data::Generators",
-    "Data::Reshapers",
-    "Data::Summarizers"
+    "DSL::English::DataAcquisitionWorkflows:ver<0.1.1+>",
+    "DSL::English::DataQueryWorkflows:ver<0.6.1+>",
+    "DSL::Entity::Metadata::ver<0.1.0+>",
+    "DSL::Shared:ver<0.1.8+>",
+    "Data::ExampleDatasets:ver<0.2.3+>",
+    "Data::Generators:ver<0.1.6+>",
+    "Data::Reshapers:ver<0.3.0+>",
+    "Data::Summarizers:ver<0.2.3+>"
   ],
   "build-depends": [],
   "test-depends": [],
