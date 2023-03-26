@@ -46,7 +46,7 @@ Here is the graph of FSM's state transition:
 $abcFSM.to-mermaid-js
 ```
 
-Here is how the dataset of the create FSM looks like:
+Here is how the dataset of the created FSM looks like:
 
 ```perl6
 .say for $abcFSM.dataset.pick(3);
