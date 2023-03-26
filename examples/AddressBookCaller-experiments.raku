@@ -1,8 +1,5 @@
 #!/usr/bin/env perl6
 
-use lib './lib';
-use lib '.';
-
 use DSL::FiniteStateMachines::AddressBookCaller;
 
 use DSL::Entity::AddressBook;
@@ -18,12 +15,17 @@ my DSL::FiniteStateMachines::AddressBookCaller $abcFSM .= new;
 
 $abcFSM.make-machine(($resourceObj,));
 
+# Show dataset sample
+#.say for $abcFSM.dataset.head(3);
+
 #--------------------------------------------------------
 # Adjust interaction and logging functions
 #--------------------------------------------------------
 
-$abcFSM.re-say = -> *@args { say |@args.map({ '⚙️' ~ $_.Str.subst(:g, "\n", "\n⚙️" )}) };
-$abcFSM.ECHOLOGGING = -> *@args {};
+#$abcFSM.re-say = -> *@args { say |@args.map({ '⚙️' ~ $_.Str.subst(:g, "\n", "\n⚙️" )}) };
+#$abcFSM.ECHOLOGGING = -> *@args {};
+
+#$abcFSM.ECHOLOGGING = &say;
 
 # say $abcFSM.to-wl();
 
@@ -31,9 +33,9 @@ $abcFSM.ECHOLOGGING = -> *@args {};
 # Run FSM
 #--------------------------------------------------------
 
-$abcFSM.run('WaitForCallCommand', ["call an actor from LOTR", "", "take last three", "", "quit"]);
+# Run the FSM interactively
 #$abcFSM.run('WaitForCallCommand');
 
-#if $abcFSM.acquiredData ~~ Array {
-#    say to-pretty-table($abcFSM.acquiredData);
-#}
+# Run the FSM with a list of commands:
+#$abcFSM.run('WaitForCallCommand', ["call an actor from LOTR", "", "take last three", "", "quit"]);
+$abcFSM.run('WaitForCallCommand', ["call an actor from LOTR", "", "take last three", "", "take the second", "", "", "2", "5", "", "quit"]);
