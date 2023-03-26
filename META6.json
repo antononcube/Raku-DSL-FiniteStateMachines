@@ -1,7 +1,7 @@
 {
   "name": "DSL::FiniteStateMachines",
   "description": "Finite State Machines (FSMs) roles and classes for making conversational agents based on Domain Specific Languages (DSLs).",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "perl": "6.d",
   "authors": [
     "Anton Antonov"
