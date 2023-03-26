@@ -50,5 +50,5 @@
     "pipeline"
   ],
   "api": "1",
-  "source-url": "https://github.com/antononcube/Raku-DSL-English-FiniteStateMachines.git"
+  "source-url": "https://github.com/antononcube/Raku-DSL-FiniteStateMachines.git"
 }
