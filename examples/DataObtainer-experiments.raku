@@ -24,9 +24,13 @@ $doFSM.ECHOLOGGING = -> *@args {};
 # Run FSM
 #--------------------------------------------------------
 
-#$doFSM.run('WaitForRequest', ["show summary", "", "group by Rows; show counts", "", "start over", "take last twelve", "", "quit"]);
-$doFSM.run('WaitForRequest');
+# Run the FSM interactively
+#$doFSM.run('WaitForRequest');
 
+# Run the FSM with a list of commands
+$doFSM.run('WaitForRequest', ["show summary", "", "group by Rows; show counts", "", "start over", "take last twelve", "", "quit"]);
+
+# Show acquired data
 #if $doFSM.acquiredData ~~ Array {
 #    say to-pretty-table($doFSM.acquiredData);
 #}
