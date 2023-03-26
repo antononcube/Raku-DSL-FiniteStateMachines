@@ -1,6 +1,6 @@
 # Raku DSL::FiniteStateMachines
     
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![License: Artistic-2.0](https://img.shields.io/badge/License-Artistic_2.0-0298c3.svg)](https://opensource.org/licenses/Artistic-2.0)
 
 ## In brief
 
@@ -61,28 +61,43 @@ $abcFSM.run('WaitForCallCommand',
 
 ------
 
+## Object Oriented Design
+
+Here is the Unified Modeling Language (UML) diagram corresponding to the classes in this package:
+
+![](./docs/UML-class-diagram.png)
+
+(The [UML spec](./docs/UML-class-diagram.puml) was automatically generated with ["UML::Translators"](https://raku.land/?q=UML%3A%3ATranslators), [AAp5].)
+
+------
+
 ## References
 
-### Repositories
+### Packages
 
-[AAr1] Anton Antonov,
+[AAp1] Anton Antonov,
 [DSL::Shared Raku package](https://github.com/antononcube/Raku-DSL-Shared),
 (2020),
 [GitHub/antononcube](https://github.com/antononcube).
 
-[AAr2] Anton Antonov,
+[AAp2] Anton Antonov,
 [DSL::Entity::Metadata Raku package](https://github.com/antononcube/Raku-DSL-Entity-Metadata),
 (2021),
 [GitHub/antononcube](https://github.com/antononcube).
 
-[AAr3] Anton Antonov,
+[AAp3] Anton Antonov,
 [DSL::English::DataAcquisitionWorkflows Raku package](https://github.com/antononcube/Raku-DSL-English-DataAcquisitionWorkflows),
 (2021),
 [GitHub/antononcube](https://github.com/antononcube).
 
-[AAr4] Anton Antonov,
+[AAp4] Anton Antonov,
 [DSL::Entity::AddressBook Raku package](https://github.com/antononcube/Raku-DSL-Entity-AddressBook,
 (2023),
+[GitHub/antononcube](https://github.com/antononcube).
+
+[AAp5] Anton Antonov,
+[UML::Translators Raku package](https://github.com/antononcube/Raku-UML-Translators,
+(2021),
 [GitHub/antononcube](https://github.com/antononcube).
 
 ### Videos

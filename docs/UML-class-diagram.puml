@@ -1,0 +1,149 @@
+@startuml
+class DSL::FiniteStateMachines::State  {
+  {field} $!id
+  {field} $!implicitNext
+  {field} &!action
+  {field} @!explicitNext
+  {method} BUILDALL
+  {method} Str
+  {method} action
+  {method} explicitNext
+  {method} gist
+  {method} id
+  {method} implicitNext
+  {method} to-wl
+}
+
+
+class DSL::FiniteStateMachines::DataObtainer  {
+  {field} $!FSMGrammar
+  {field} $!acquiredData
+  {field} $!currentStateID
+  {field} $!dataset
+  {field} $!datasetColumnNames
+  {field} $!initDataset
+  {field} $!itemSpec
+  {field} $!itemSpecCommand
+  {field} %!states
+  {field} &!ECHOLOGGING
+  {field} &!choose-transition
+  {field} &!re-say
+  {field} &!re-warn
+  {field} @!grammar-args
+  {method} BUILDALL
+  {method} ECHOLOGGING
+  {method} FSMGrammar
+  {method} acquiredData
+  {method} add-state
+  {method} add-transition
+  {method} apply-query-retrieve-act-pattern
+  {method} choose-transition
+  {method} currentStateID
+  {method} dataset
+  {method} datasetColumnNames
+  {method} grammar-args
+  {method} init-dataset
+  {method} initDataset
+  {method} is-metadata-dataset
+  {method} is-metadata-row
+  {method} itemSpec
+  {method} itemSpecCommand
+  {method} make-machine
+  {method} re-say
+  {method} re-warn
+  {method} run
+  {method} states
+  {method} to-wl
+  {method} transition-target
+}
+DSL::FiniteStateMachines::DataObtainer --|> DSL::FiniteStateMachines::FSMish
+DSL::FiniteStateMachines::DataObtainer --|> DSL::FiniteStateMachines::QueryRetrieveActFSMRole
+
+
+class DSL::FiniteStateMachines::FSMish <<role>> {
+  {field} $!currentStateID
+  {field} %!states
+  {field} &!ECHOLOGGING
+  {field} &!choose-transition
+  {field} &!re-say
+  {field} &!re-warn
+  {method} add-state
+  {method} run
+  {method} to-wl
+}
+
+
+class DSL::FiniteStateMachines::AddressBookCaller  {
+  {field} $!FSMGrammar
+  {field} $!acquiredData
+  {field} $!currentStateID
+  {field} $!dataset
+  {field} $!datasetColumnNames
+  {field} $!initDataset
+  {field} $!itemSpec
+  {field} $!itemSpecCommand
+  {field} %!states
+  {field} &!ECHOLOGGING
+  {field} &!choose-transition
+  {field} &!re-say
+  {field} &!re-warn
+  {field} @!grammar-args
+  {method} BUILDALL
+  {method} ECHOLOGGING
+  {method} FSMGrammar
+  {method} acquiredData
+  {method} add-state
+  {method} add-transition
+  {method} apply-query-retrieve-act-pattern
+  {method} choose-transition
+  {method} currentStateID
+  {method} dataset
+  {method} datasetColumnNames
+  {method} grammar-args
+  {method} init-dataset
+  {method} initDataset
+  {method} is-metadata-dataset
+  {method} is-metadata-row
+  {method} itemSpec
+  {method} itemSpecCommand
+  {method} make-machine
+  {method} re-say
+  {method} re-warn
+  {method} run
+  {method} states
+  {method} to-wl
+  {method} transition-target
+}
+DSL::FiniteStateMachines::AddressBookCaller --|> DSL::FiniteStateMachines::FSMish
+DSL::FiniteStateMachines::AddressBookCaller --|> DSL::FiniteStateMachines::QueryRetrieveActFSMRole
+
+
+class DSL::FiniteStateMachines::QueryRetrieveActFSMRole <<role>> {
+  {field} $!FSMGrammar
+  {field} $!acquiredData
+  {field} $!dataset
+  {field} $!datasetColumnNames
+  {field} $!initDataset
+  {field} $!itemSpec
+  {field} $!itemSpecCommand
+  {field} @!grammar-args
+  {method} apply-query-retrieve-act-pattern
+  {method} init-dataset
+  {method} is-metadata-dataset
+  {method} is-metadata-row
+}
+DSL::FiniteStateMachines::QueryRetrieveActFSMRole --|> DSL::FiniteStateMachines::FSMish
+
+
+class DSL::FiniteStateMachines::Transition  {
+  {field} $!id
+  {field} $!to
+  {method} BUILDALL
+  {method} Str
+  {method} gist
+  {method} id
+  {method} to
+}
+
+
+@enduml
