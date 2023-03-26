@@ -14,6 +14,15 @@ class DSL::FiniteStateMachines::State  {
   {method} to-wl
 }
 
+class DSL::FiniteStateMachines::Transition  {
+  {field} $!id
+  {field} $!to
+  {method} BUILDALL
+  {method} Str
+  {method} gist
+  {method} id
+  {method} to
+}
 
 class DSL::FiniteStateMachines::DataObtainer  {
   {field} $!FSMGrammar
@@ -133,17 +142,6 @@ class DSL::FiniteStateMachines::QueryRetrieveActFSMRole <<role>> {
   {method} is-metadata-row
 }
 DSL::FiniteStateMachines::QueryRetrieveActFSMRole --|> DSL::FiniteStateMachines::FSMish
-
-
-class DSL::FiniteStateMachines::Transition  {
-  {field} $!id
-  {field} $!to
-  {method} BUILDALL
-  {method} Str
-  {method} gist
-  {method} id
-  {method} to
-}
 
 
 @enduml
