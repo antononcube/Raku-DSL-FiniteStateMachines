@@ -19,5 +19,9 @@ grammar DSL::FiniteStateMachines::AddressBookCaller::FSMGlobalCommand
         does DSL::Shared::Roles::English::GlobalCommand
         does DSL::Shared::Entity::Grammar::EntityNames
         does DSL::Entity::AddressBook::Grammar::EntityNames {
-    rule TOP($*resourceObj) { <call-command($*resourceObj)> || <.display-directive>? <list-management-command> || <global-command> || <workflow-commands-list> }
+    rule TOP($*resourceObj) {
+        || <call-command($*resourceObj)>
+        || <.display-directive>? <list-management-command>
+        || <global-command>
+        || <workflow-commands-list> }
 };
