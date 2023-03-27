@@ -272,7 +272,7 @@ role DSL::FiniteStateMachines::FSMish {
     }
 
     method to-wl() {
-        return "List[{%.states.values>>.to-wl.join(',')}]";
+        return 'Graph[#, VertexLabels -> "Name", EdgeLabels -> "EdgeTag"]& @ ' ~ "List[{%.states.values>>.to-wl.join(',')}]";
     }
 
     method to-mermaid-js(*%args) {
