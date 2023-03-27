@@ -46,6 +46,9 @@ Here is the graph of FSM's state transitions:
 $abcFSM.to-mermaid-js
 ```
 
+**Remark:** In order to obtain a Mathematica -- or Wolfram Language (WL) -- representation of the state transitions
+graph the method `to-wl` can be used.
+
 Here is how the dataset of the created FSM looks like:
 
 ```perl6
