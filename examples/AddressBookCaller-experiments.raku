@@ -39,8 +39,6 @@ $abcFSM.make-machine(($resourceObj,));
 
 #$abcFSM.ECHOLOGGING = &say;
 
-# say $abcFSM.to-wl();
-
 #--------------------------------------------------------
 # Run FSM
 #--------------------------------------------------------
