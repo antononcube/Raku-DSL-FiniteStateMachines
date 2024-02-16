@@ -54,7 +54,7 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
             $input = val get;
         }
 
-        # Check was "global" command was entered. E.g."start over".
+        # Check whether a "global" command was entered. E.g."start over".
         my $manager = DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers.new( object => $!dataset.clone);
         my $pres = $.FSMGrammar.parse($input, rule => 'TOP', actions => $manager, args => self.grammar-args);
 
@@ -107,7 +107,7 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
 
         }
 
-        &.ECHOLOGGING.("$stateID: Main commad parsing result: ", $pres);
+        &.ECHOLOGGING.("$stateID: Main command parsing result: ", $pres);
 
         # If it cannot be parsed, show message
         # Maybe ...
