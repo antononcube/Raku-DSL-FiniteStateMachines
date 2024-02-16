@@ -104,6 +104,15 @@ role DSL::FiniteStateMachines::FSMish {
     }
 
     #------------------------------------------------------
+    method delete-state(Str $id) {
+        %!states{$id}:delete;
+        %!states.map({
+            $_.value.explicitNext = $_.value.explicitNext.grep({ $_.to ne $id });
+            $_.key => $_.value
+        });
+    }
+
+    #------------------------------------------------------
     multi method add-transition(Str $from, Str $to) {
         %!states{$from}.implicitNext = $to;
     }
