@@ -36,6 +36,22 @@ class DSL::FiniteStateMachines::DataObtainer
     }
 
     #--------------------------------------------------------
+    multi method choose-transition(Str $stateID where $_ ~~ 'ExportRecords',
+                                   $input is copy = Whatever, UInt $maxLoops = 5 --> Str) {
+
+        # Get next transitions
+        my DSL::FiniteStateMachines::Transition @transitions = %.states{$stateID}.explicitNext;
+
+        &.ECHOLOGGING.(@transitions.raku.Str);
+
+        $!acquiredData = $!dataset>>.clone.clone;
+        $!itemSpec = 'query-records-';
+
+        # return 'ActOnItem';
+        return self.transition-target(@transitions, 'acquired');
+    }
+
+    #--------------------------------------------------------
     multi method choose-transition(Str $stateID where $_ ~~ 'AcquireItem',
                                    $input is copy = Whatever, UInt $maxLoops = 5 --> Str) {
 
