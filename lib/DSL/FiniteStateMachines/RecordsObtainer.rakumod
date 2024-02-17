@@ -53,6 +53,46 @@ class DSL::FiniteStateMachines::RecordsObtainer
     }
 
     #--------------------------------------------------------
+    method apply-query-retrieve-act-pattern() {
+
+        #--------------------------------------------------------
+        # States
+        #--------------------------------------------------------
+        self.add-state("WaitForRequest",   -> $obj { say "🔊 PLEASE enter item request."; });
+        self.add-state("ListOfItems",      -> $obj { say "🔊 LISTING items."; });
+        self.add-state("PrioritizedList",  -> $obj { say "🔊 PRIORITIZED items."; });
+        self.add-state("ExportRecords",    -> $obj { say "🔊 EXPORT records: ", $obj.dataset; });
+        self.add-state("ActOnItem",        -> $obj { say "🔊 ACT ON items: ", $obj.dataset.elems; });
+        self.add-state("Help",             -> $obj { say "🔊 HELP is help..."; });
+        self.add-state("Exit",             -> $obj { say "🔊 SHUTTING down..."; });
+
+        #--------------------------------------------------------
+        # Transitions
+        #--------------------------------------------------------
+        self.add-transition("WaitForRequest",   "itemSpec",           "ListOfItems");
+        self.add-transition("WaitForRequest",   "startOver",          "WaitForRequest");
+        self.add-transition("WaitForRequest",   "prioritize",         "PrioritizedList");
+        self.add-transition("WaitForRequest",   "saveData",           "ExportRecords");
+        self.add-transition("WaitForRequest",   "help",               "Help");
+        self.add-transition("WaitForRequest",   "quit",               "Exit");
+
+        self.add-transition("PrioritizedList",  "priorityListGiven",  "WaitForRequest");
+
+        self.add-transition("ListOfItems",      "manyItems",          "WaitForRequest");
+        self.add-transition("ListOfItems",      "noItems",            "WaitForRequest");
+        self.add-transition("ListOfItems",      "noChange",           "WaitForRequest");
+
+        self.add-transition("ExportRecords",    "acquired",           "ActOnItem");
+        self.add-transition("ActOnItem",        "stay",               "ActOnItem");
+        self.add-transition("ActOnItem",        "quit",               "Exit");
+
+        self.add-transition("Help",             "helpGiven",          "WaitForRequest");
+
+        # Result
+        return self;
+    }
+
+    #--------------------------------------------------------
     method init-dataset(@dataset) {
         if !is-array-of-hashes(@dataset) {
             die "The first argument is expected to be an array of hashes.";
@@ -72,18 +112,6 @@ class DSL::FiniteStateMachines::RecordsObtainer
         # States and transitions
         #--------------------------------------------------------
         self.apply-query-retrieve-act-pattern();
-
-
-        self.delete-state("AcquireItem");
-
-
-        self.add-state("AcquireRecords",-> $obj { say "🔊 ACQUIRE records: ", $obj.dataset; });
-
-        self.add-transition("ListOfItems", "recordsObtained", "AcquireRecords");
-
-        self.add-transition("AcquireRecords", "acquired", "ActOnItem");
-
-        say self.states.keys;
 
         #--------------------------------------------------------
         # Loggers
