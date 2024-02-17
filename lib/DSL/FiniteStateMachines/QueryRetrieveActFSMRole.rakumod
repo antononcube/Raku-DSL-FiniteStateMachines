@@ -98,6 +98,11 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
             # return 'PriorityList';
             return self.transition-target(@transitions, 'prioritize');
 
+        } elsif $pres<global-command><global-save-data> {
+
+            # return 'PriorityList';
+            return self.transition-target(@transitions, 'saveData');
+
         } elsif so $pres<global-command> {
 
             $.re-warn.("$stateID: No implemented reaction for the given service input.");
@@ -151,11 +156,18 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
 
             use MONKEY;
             my $obj = $!dataset;
-            &.ECHOLOGGING.("Interpreted: {$!itemSpec.made}");
-            EVAL $!itemSpec.made;
-            $!dataset = $obj;
-            if $!dataset ~~ Seq { $!dataset = $!dataset.Array }
+            &.ECHOLOGGING.("Interpreted: { $!itemSpec.made }");
 
+            try {
+                EVAL $!itemSpec.made;
+            }
+
+            if $! {
+                note 'Evaluation error. Pipeline value is not changed.'
+            } else {
+                $!dataset = $obj;
+                if $!dataset ~~ Seq { $!dataset = $!dataset.Array }
+            }
         }
 
         if $lastDataset eqv $!dataset {
@@ -217,6 +229,18 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
     }
 
     #--------------------------------------------------------
+    multi method choose-transition(Str $stateID where $_ ~~ 'ExportRecords',
+                                   $input is copy = Whatever, UInt $maxLoops = 5 --> Str) {
+        # Prompt selection menu
+        &.re-say.('Nothing to do...');
+
+        note 'Not overridden';
+
+        # Goto Exit state or stay
+        return 'Exit';
+    }
+
+    #--------------------------------------------------------
     multi method choose-transition(Str $stateID where $_ ~~ 'AcquireItem',
                                    $input is copy = Whatever, UInt $maxLoops = 5 --> Str) {
 
@@ -264,6 +288,7 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
         self.add-state("WaitForRequest",   -> $obj { say "🔊 PLEASE enter item request."; });
         self.add-state("ListOfItems",      -> $obj { say "🔊 LISTING items."; });
         self.add-state("PrioritizedList",  -> $obj { say "🔊 PRIORITIZED items."; });
+        self.add-state("ExportRecords",    -> $obj { say "🔊 EXPORT records: ", $obj.dataset; });
         self.add-state("AcquireItem",      -> $obj { say "🔊 ACQUIRE item: ", $obj.dataset[0]; });
         self.add-state("ActOnItem",        -> $obj { say "🔊 ACT ON item: ", $obj.dataset[0]; });
         self.add-state("Help",             -> $obj { say "🔊 HELP is help..."; });
@@ -275,6 +300,7 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
         self.add-transition("WaitForRequest",   "itemSpec",           "ListOfItems");
         self.add-transition("WaitForRequest",   "startOver",          "WaitForRequest");
         self.add-transition("WaitForRequest",   "prioritize",         "PrioritizedList");
+        self.add-transition("WaitForRequest",   "saveData",           "ExportRecords");
         self.add-transition("WaitForRequest",   "help",               "Help");
         self.add-transition("WaitForRequest",   "quit",               "Exit");
 
@@ -285,6 +311,7 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
         self.add-transition("ListOfItems",      "noChange",           "WaitForRequest");
         self.add-transition("ListOfItems",      "uniqueItemObtained", "AcquireItem");
 
+        self.add-transition("ExportRecords",    "acquired",           "ActOnItem");
         self.add-transition("AcquireItem",      "acquired",           "ActOnItem");
         self.add-transition("ActOnItem",        "stay",               "ActOnItem");
         self.add-transition("ActOnItem",        "quit",               "Exit");
