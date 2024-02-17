@@ -1,7 +1,5 @@
 #!/usr/bin/env perl6
 
-use lib <.>;
-
 use Data::ExampleDatasets;
 use DSL::FiniteStateMachines::RecordsObtainer;
 use Data::TypeSystem;
@@ -11,13 +9,13 @@ use Data::TypeSystem::Predicates;
 # Example dataset
 #--------------------------------------------------------
 
-my @dsTitanic = example-dataset( / 'COUNT::titanic' $/ ):keep;
+my @dsData = example-dataset( / 'COUNT::titanic' $/ ):keep;
 
 #`[
-note deduce-type(@dsTitanic);
-note is-array-of-hashes(@dsTitanic);
+note deduce-type(@dsData);
+note is-array-of-hashes(@dsData);
 
-.say for @dsTitanic.head(10);
+.say for @dsData.head(10);
 ]
 
 #--------------------------------------------------------
@@ -26,7 +24,7 @@ note is-array-of-hashes(@dsTitanic);
 
 my DSL::FiniteStateMachines::RecordsObtainer $doFSM .= new;
 
-$doFSM.make-machine(@dsTitanic);
+$doFSM.make-machine(@dsData);
 
 say $doFSM.to-wl();
 
