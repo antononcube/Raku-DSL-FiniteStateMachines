@@ -11,7 +11,7 @@
     "DSL::English::DataAcquisitionWorkflows:ver<0.1.1+>",
     "DSL::English::DataQueryWorkflows:ver<0.6.1+>",
     "DSL::Entity::Metadata::ver<0.1.0+>",
-    "DSL::Shared:ver<0.1.8+>",
+    "DSL::Shared:ver<0.2.4+>",
     "Data::ExampleDatasets:ver<0.2.3+>",
     "Data::Generators:ver<0.1.6+>",
     "Data::Reshapers:ver<0.3.0+>",
