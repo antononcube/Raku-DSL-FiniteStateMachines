@@ -163,6 +163,7 @@ class DSL::FiniteStateMachines::DataObtainer
     method make-machine() {
         # Initialize attributes
         self.FSMGrammar = DSL::FiniteStateMachines::DataObtainer::FSMGlobalCommand;
+        self.FSMActions = DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers;
         self.init-dataset();
 
         self.apply-query-retrieve-act-pattern();

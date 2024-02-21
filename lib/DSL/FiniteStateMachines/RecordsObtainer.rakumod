@@ -107,6 +107,7 @@ class DSL::FiniteStateMachines::RecordsObtainer
     method make-machine(@dataset) {
         # Initialize attributes
         self.FSMGrammar = DSL::FiniteStateMachines::RecordsObtainer::FSMGlobalCommand;
+        self.FSMActions = DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers;
         self.init-dataset(@dataset);
 
         #--------------------------------------------------------

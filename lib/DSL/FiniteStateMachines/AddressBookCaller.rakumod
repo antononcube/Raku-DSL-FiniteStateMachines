@@ -146,6 +146,7 @@ class DSL::FiniteStateMachines::AddressBookCaller
         # Initialize attributes
         self.FSMGrammar = DSL::FiniteStateMachines::AddressBookCaller::FSMGlobalCommand;
         self.grammar-args = @grammar-args;
+        self.FSMActions = DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers;
         self.init-dataset();
 
         self.apply-query-retrieve-act-pattern();
