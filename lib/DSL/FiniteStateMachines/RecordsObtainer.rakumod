@@ -79,6 +79,7 @@ class DSL::FiniteStateMachines::RecordsObtainer
         self.add-transition("PrioritizedList",  "priorityListGiven",  "WaitForRequest");
 
         self.add-transition("ListOfItems",      "manyItems",          "WaitForRequest");
+        self.add-transition("ListOfItems",      "uniqueItemObtained", "WaitForRequest");
         self.add-transition("ListOfItems",      "noItems",            "WaitForRequest");
         self.add-transition("ListOfItems",      "noChange",           "WaitForRequest");
 
