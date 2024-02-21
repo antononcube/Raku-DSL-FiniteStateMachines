@@ -56,7 +56,13 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
         }
 
         # Check whether a "global" command was entered. E.g."start over".
-        my $manager = $.FSMActions.new(object => $!dataset.clone);
+
+        my $manager = do if $.FSMActions.DEFINITE {
+            $.FSMActions
+        } else {
+            $.FSMActions.new(object => $!dataset.clone);
+        }
+
         my $pres = $.FSMGrammar.parse($input, rule => 'TOP', actions => $manager, args => self.grammar-args);
 
         &.ECHOLOGGING.("$stateID: Global commad parsing result: ", $pres);
@@ -153,7 +159,8 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
 
         # Get new dataset
         &.ECHOLOGGING.("Parsed: {$!itemSpec.gist}");
-        if $!itemSpec<list-management-command> || $!itemSpec<workflow-commands-list> {
+        #if $!itemSpec<list-management-command> || $!itemSpec<workflow-commands-list> {
+        if ! $!itemSpec<global-command> {
 
             use MONKEY;
             my $obj = $!dataset;
