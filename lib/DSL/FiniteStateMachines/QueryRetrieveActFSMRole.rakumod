@@ -21,8 +21,8 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
     has $.datasetColumnNames is rw = Whatever;
     has $.initDataset is rw;
     has $.acquiredData;
-    has $.itemSpec;
-    has $.itemSpecCommand;
+    has $.itemSpec is rw;
+    has $.itemSpecCommand is rw;
     has $.FSMGrammar is rw;
     has @.grammar-args is rw = ();
     has $.FSMActions is rw;
@@ -131,6 +131,10 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
 
         &.ECHOLOGGING.("$stateID: Main command parsing result: ", $pres);
 
+        # Register the input command and the parsing result
+        $!itemSpecCommand = $input;
+        $!itemSpec = $pres;
+
         # If it cannot be parsed, show message
         # Maybe ...
 
@@ -138,10 +142,6 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
             # return 'UnknownCommand';
             return self.transition-target(@transitions, 'unparsed');
         }
-
-        # Switch to the next state
-        $!itemSpecCommand = $input;
-        $!itemSpec = $pres;
 
         # return 'ListOfItems';
         return self.transition-target(@transitions, 'itemSpec');
@@ -174,10 +174,11 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
 
             use MONKEY;
             my $obj = $!dataset;
-            &.ECHOLOGGING.("Interpreted: { $!itemSpec.made }");
+            my $code = $!itemSpec ~~ Match ?? $!itemSpec.made !! $!itemSpec;
+            &.ECHOLOGGING.("Interpreted: $code");
 
             try {
-                EVAL $!itemSpec.made;
+                EVAL $code;
             }
 
             if $! {
