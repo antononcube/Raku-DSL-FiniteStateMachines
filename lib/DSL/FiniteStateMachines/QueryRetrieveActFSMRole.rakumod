@@ -42,31 +42,7 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
     }
 
     #--------------------------------------------------------
-    multi method choose-transition(Str $stateID where $_ ~~ 'WaitForRequest',
-                                   $input is copy = Whatever, UInt $maxLoops = 5 --> Str) {
-
-        # Get next transitions
-        my DSL::FiniteStateMachines::Transition @transitions = %.states{$stateID}.explicitNext;
-
-        &.ECHOLOGGING.(@transitions.raku.Str);
-
-        # Get input if not given
-        if $input.isa(Whatever) {
-            $input = val get;
-        }
-
-        # Check whether a "global" command was entered. E.g."start over".
-
-        my $manager = do if $.FSMActions.DEFINITE {
-            $.FSMActions
-        } else {
-            $.FSMActions.new(object => $!dataset.clone);
-        }
-
-        my $pres = $.FSMGrammar.parse($input, rule => 'TOP', actions => $manager, args => self.grammar-args);
-
-        &.ECHOLOGGING.("$stateID: Global commad parsing result: ", $pres);
-
+    method command-transition-target($stateID, $input, @transitions, $pres, ) {
         if $pres<global-command><global-quit> {
 
             &.re-say.("$stateID: Quiting.");
@@ -112,11 +88,45 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
 
         } elsif so $pres<global-command> {
 
-            $.re-warn.("$stateID: No implemented reaction for the given service input.");
+            $.re-warn.("$stateID: No implemented reaction for the given global command input.");
 
             # return 'WaitForRequest';
             return self.transition-target(@transitions, 'startOver');
 
+        }
+
+        return Nil;
+    }
+
+    #--------------------------------------------------------
+    multi method choose-transition(Str $stateID where $_ ~~ 'WaitForRequest',
+                                   $input is copy = Whatever, UInt $maxLoops = 5 --> Str) {
+
+        # Get next transitions
+        my DSL::FiniteStateMachines::Transition @transitions = %.states{$stateID}.explicitNext;
+
+        &.ECHOLOGGING.(@transitions.raku.Str);
+
+        # Get input if not given
+        if $input.isa(Whatever) {
+            $input = val get;
+        }
+
+        # Check whether a "global" command was entered. E.g."start over".
+
+        my $manager = do if $.FSMActions.DEFINITE {
+            $.FSMActions
+        } else {
+            $.FSMActions.new(object => $!dataset.clone);
+        }
+
+        my $pres = $.FSMGrammar.parse($input, rule => 'TOP', actions => $manager, args => self.grammar-args);
+
+        # Here we handle <global-command> only, but descendant classes can do other handling
+        my $comRes = self.command-transition-target($stateID, $input, @transitions, $pres);
+        with $comRes {
+            &.ECHOLOGGING.("$stateID: Global commad parsing result: ", $pres);
+            return $comRes;
         }
 
         &.ECHOLOGGING.("$stateID: Main command parsing result: ", $pres);
