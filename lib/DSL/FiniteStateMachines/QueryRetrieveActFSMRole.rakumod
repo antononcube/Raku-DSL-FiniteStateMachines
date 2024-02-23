@@ -135,8 +135,8 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
         # Maybe ...
 
         if not so $pres {
-            # return 'WaitForRequest';
-            return self.transition-target(@transitions, 'startOver');
+            # return 'UnknownCommand';
+            return self.transition-target(@transitions, 'unparsed');
         }
 
         # Switch to the next state
@@ -233,6 +233,21 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
     }
 
     #--------------------------------------------------------
+    multi method choose-transition(Str $stateID where $_ ~~ 'UnknownCommand',
+                                   $input is copy = Whatever, UInt $maxLoops = 5 --> Str) {
+        # Get next transitions
+        my DSL::FiniteStateMachines::Transition @transitions = %.states{$stateID}.explicitNext;
+
+        # Prompt selection menu
+        &.re-say.('Unknown command');
+
+        note 'Unknown command';
+
+        # Goto Exit state or stay
+        return self.transition-target(@transitions, 'continue');;
+    }
+
+    #--------------------------------------------------------
     multi method choose-transition(Str $stateID where $_ ~~ 'PrioritizedList',
                                    $input is copy = Whatever, UInt $maxLoops = 5 --> Str) {
 
@@ -306,6 +321,7 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
         self.add-state("WaitForRequest",   -> $obj { say "🔊 PLEASE enter item request."; });
         self.add-state("ListOfItems",      -> $obj { say "🔊 LISTING items."; });
         self.add-state("PrioritizedList",  -> $obj { say "🔊 PRIORITIZED items."; });
+        self.add-state("UnknownCommand",   -> $obj { say "🔊 UNKNOWN COMMAND."; });
         self.add-state("ExportRecords",    -> $obj { say "🔊 EXPORT records: ", $obj.dataset; });
         self.add-state("AcquireItem",      -> $obj { say "🔊 ACQUIRE item: ", $obj.dataset[0]; });
         self.add-state("ActOnItem",        -> $obj { say "🔊 ACT ON item: ", $obj.dataset[0]; });
@@ -319,10 +335,12 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
         self.add-transition("WaitForRequest",   "startOver",          "WaitForRequest");
         self.add-transition("WaitForRequest",   "prioritize",         "PrioritizedList");
         self.add-transition("WaitForRequest",   "saveData",           "ExportRecords");
+        self.add-transition("WaitForRequest",   "unparsed",           "UnknownCommand");
         self.add-transition("WaitForRequest",   "help",               "Help");
         self.add-transition("WaitForRequest",   "quit",               "Exit");
 
         self.add-transition("PrioritizedList",  "priorityListGiven",  "WaitForRequest");
+        self.add-transition("UnknownCommand",   "continue",           "WaitForRequest");
 
         self.add-transition("ListOfItems",      "manyItems",          "WaitForRequest");
         self.add-transition("ListOfItems",      "noItems",            "WaitForRequest");

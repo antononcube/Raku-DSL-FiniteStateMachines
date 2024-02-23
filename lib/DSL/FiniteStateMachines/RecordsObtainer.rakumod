@@ -61,6 +61,7 @@ class DSL::FiniteStateMachines::RecordsObtainer
         self.add-state("WaitForRequest",   -> $obj { say "🔊 PLEASE enter item request."; });
         self.add-state("ListOfItems",      -> $obj { say "🔊 LISTING items."; });
         self.add-state("PrioritizedList",  -> $obj { say "🔊 PRIORITIZED items."; });
+        self.add-state("UnknownCommand",   -> $obj { say "🔊 UNKNOWN COMMAND."; });
         self.add-state("ExportRecords",    -> $obj { say "🔊 EXPORT records: ", $obj.dataset; });
         self.add-state("ActOnItem",        -> $obj { say "🔊 ACT ON items: ", $obj.dataset.elems; });
         self.add-state("Help",             -> $obj { say "🔊 HELP is help..."; });
@@ -72,11 +73,13 @@ class DSL::FiniteStateMachines::RecordsObtainer
         self.add-transition("WaitForRequest",   "itemSpec",           "ListOfItems");
         self.add-transition("WaitForRequest",   "startOver",          "WaitForRequest");
         self.add-transition("WaitForRequest",   "prioritize",         "PrioritizedList");
+        self.add-transition("WaitForRequest",   "unparsed",           "UnknownCommand");
         self.add-transition("WaitForRequest",   "saveData",           "ExportRecords");
         self.add-transition("WaitForRequest",   "help",               "Help");
         self.add-transition("WaitForRequest",   "quit",               "Exit");
 
         self.add-transition("PrioritizedList",  "priorityListGiven",  "WaitForRequest");
+        self.add-transition("UnknownCommand",   "continue",           "WaitForRequest");
 
         self.add-transition("ListOfItems",      "manyItems",          "WaitForRequest");
         self.add-transition("ListOfItems",      "uniqueItemObtained", "WaitForRequest");
