@@ -11,6 +11,8 @@ use DSL::English::DataQueryWorkflows::Grammar;
 use DSL::English::DataQueryWorkflows::Actions::Raku::Reshapers;
 use Lingua::NumericWordForms::Roles::English::WordedNumberSpec;
 
+constant $MAX-ROWS-TO-SHOW = 20;
+
 #--------------------------------------------------------
 role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
         does DSL::FiniteStateMachines::FSMish {
@@ -204,12 +206,12 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
             &.re-say.("$stateID: Obtained:");
             &.re-say.(to-pretty-table([$!dataset,], field-names => self.datasetColumnNames))
         } elsif self.is-metadata-dataset($!dataset) {
-            if $!dataset.elems ≤ 20 {
+            if $!dataset.elems ≤ $MAX-ROWS-TO-SHOW {
                 &.re-say.("$stateID: Obtained {$!dataset.elems } records:");
                 &.re-say.(to-pretty-table($!dataset, field-names => self.datasetColumnNames));
             } else {
-                &.re-say.("$stateID: Obtained {$!dataset.elems } records. Here are the first 20");
-                &.re-say.(to-pretty-table($!dataset.head(20), field-names => self.datasetColumnNames));
+                &.re-say.("$stateID: Obtained {$!dataset.elems } records. Here are the first $MAX-ROWS-TO-SHOW");
+                &.re-say.(to-pretty-table($!dataset.head($MAX-ROWS-TO-SHOW), field-names => self.datasetColumnNames));
             }
         }
 
