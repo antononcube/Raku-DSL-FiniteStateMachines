@@ -195,16 +195,22 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
             return self.transition-target(@transitions, 'noChange');
         }
 
-        &.re-say.("$stateID: Obtained the records:");
         #`(
         say '$!dataset : ', $!dataset.raku;
         say 'self.is-metadata-row($!dataset) : ', self.is-metadata-row($!dataset);
         say 'self.is-metadata-dataset($!dataset) : ', self.is-metadata-dataset($!dataset);
         )
         if self.is-metadata-row($!dataset) {
+            &.re-say.("$stateID: Obtained:");
             &.re-say.(to-pretty-table([$!dataset,], field-names => self.datasetColumnNames))
         } elsif self.is-metadata-dataset($!dataset) {
-            &.re-say.(to-pretty-table($!dataset, field-names => self.datasetColumnNames));
+            if $!dataset.elems ≤ 20 {
+                &.re-say.("$stateID: Obtained {$!dataset.elems } records:");
+                &.re-say.(to-pretty-table($!dataset, field-names => self.datasetColumnNames));
+            } else {
+                &.re-say.("$stateID: Obtained {$!dataset.elems } records. Here are the first 20");
+                &.re-say.(to-pretty-table($!dataset.head(20), field-names => self.datasetColumnNames));
+            }
         }
 
         if $!dataset.elems == 0 {
