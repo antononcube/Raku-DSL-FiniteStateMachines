@@ -150,6 +150,25 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
     }
 
     #--------------------------------------------------------
+    method execute-data-processing() {
+        use MONKEY;
+        my $obj = $!dataset;
+        my $code = $!itemSpec ~~ Match ?? $!itemSpec.made !! $!itemSpec;
+        &.ECHOLOGGING.("Interpreted: $code");
+
+        try {
+            EVAL $code;
+        }
+
+        if $! {
+            note 'Evaluation error. Pipeline value is not changed.'
+        } else {
+            $!dataset = $obj;
+            if $!dataset ~~ Seq { $!dataset = $!dataset.Array }
+        }
+    }
+
+    #--------------------------------------------------------
     multi method choose-transition(Str $stateID where $_ ~~ 'ListOfItems',
                                    $input is copy = Whatever, UInt $maxLoops = 5 --> Str) {
 
@@ -174,21 +193,7 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
         #if $!itemSpec<list-management-command> || $!itemSpec<workflow-commands-list> {
         if ! $!itemSpec<global-command> {
 
-            use MONKEY;
-            my $obj = $!dataset;
-            my $code = $!itemSpec ~~ Match ?? $!itemSpec.made !! $!itemSpec;
-            &.ECHOLOGGING.("Interpreted: $code");
-
-            try {
-                EVAL $code;
-            }
-
-            if $! {
-                note 'Evaluation error. Pipeline value is not changed.'
-            } else {
-                $!dataset = $obj;
-                if $!dataset ~~ Seq { $!dataset = $!dataset.Array }
-            }
+            self.execute-data-processing();
         }
 
         if $lastDataset eqv $!dataset {
