@@ -154,7 +154,7 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
         use MONKEY;
         my $obj = $!dataset;
         my $code = $!itemSpec ~~ Match ?? $!itemSpec.made !! $!itemSpec;
-        &.ECHOLOGGING.("Interpreted: $code");
+        &.ECHOLOGGING.("Interpreted: ⎡$code⎦");
 
         try {
             EVAL $code;
