@@ -44,7 +44,7 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
     }
 
     #--------------------------------------------------------
-    method command-transition-target($stateID, $input, @transitions, $pres, ) {
+    method command-transition-target($stateID, $input, @transitions, $pres) {
         if $pres<global-command><global-quit> {
 
             &.re-say.("$stateID: Quiting.");
