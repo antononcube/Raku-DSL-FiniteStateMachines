@@ -138,14 +138,14 @@ role DSL::FiniteStateMachines::FSMish {
     method run(Str $initID, $inputs is copy = Whatever, UInt $maxLoops = 40) {
 
         # Verify arguments
-        if $inputs.isa(List) { $inputs = $inputs.Array }
+        if $inputs.isa(Iterable) { $inputs = $inputs.Array }
 
         if not ($inputs.isa(Whatever) or $inputs ~~ Array) {
             die "The second argument is expected to be an Array or Whatever.";
         }
 
         if %!states{$initID}:!exists {
-            &!re-warn( "Unknown initial state ID: $initID ." );
+            &!re-warn( "Unknown initial state ID: ⎡$initID⎦" );
             return Nil;
         }
 
