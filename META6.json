@@ -10,7 +10,7 @@
   "depends": [
     "DSL::English::DataAcquisitionWorkflows:ver<0.1.1+>",
     "DSL::English::DataQueryWorkflows:ver<0.6.1+>",
-    "DSL::Entity::Metadata::ver<0.1.0+>",
+    "DSL::Entity::Metadata:ver<0.1.0+>",
     "DSL::Shared:ver<0.2.4+>",
     "Data::ExampleDatasets:ver<0.2.3+>",
     "Data::Generators:ver<0.1.6+>",
@@ -30,6 +30,7 @@
     "DSL::FiniteStateMachines::AddressBookCaller::Utilities": "lib/DSL/FiniteStateMachines/AddressBookCaller/Utilities.rakumod",
     "DSL::FiniteStateMachines::DataObtainer": "lib/DSL/FiniteStateMachines/DataObtainer.rakumod",
     "DSL::FiniteStateMachines::DataObtainer::FSMGlobalCommand": "lib/DSL/FiniteStateMachines/DataObtainer/FSMGlobalCommand.rakumod",
+    "DSL::FiniteStateMachines::FSMMessaging": "lib/DSL/FiniteStateMachines/FSMMessaging.rakumod",
     "DSL::FiniteStateMachines::FSMish": "lib/DSL/FiniteStateMachines/FSMish.rakumod",
     "DSL::FiniteStateMachines::QueryRetrieveActFSMRole": "lib/DSL/FiniteStateMachines/QueryRetrieveActFSMRole.rakumod",
     "DSL::FiniteStateMachines::RecordsObtainer": "lib/DSL/FiniteStateMachines/RecordsObtainer.rakumod",
