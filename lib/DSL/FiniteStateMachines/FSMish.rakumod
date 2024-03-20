@@ -91,7 +91,7 @@ class DSL::FiniteStateMachines::Transition {
 role DSL::FiniteStateMachines::FSMish {
 
     has DSL::FiniteStateMachines::State %.states;
-    has Str $.currentStateID;
+    has Str $.currentStateID is rw;
     has &.choose-transition is rw;
 
     has &.re-say is rw = &say;
