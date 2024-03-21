@@ -1,9 +1,10 @@
-role DSL::FiniteStateMachines::FSMMessaging {
+role DSL::FiniteStateMachines::FSMReactish {
 
     #======================================================
     # Initial message run
     #======================================================
-    method init-message-run(Str $initID) {
+    #| Sets initial state that waits for message(s) to react upon.
+    method react-ready-with(Str $initID) {
 
         # Check state
         if self.states{$initID}:!exists {
@@ -19,7 +20,9 @@ role DSL::FiniteStateMachines::FSMMessaging {
     #======================================================
     # Message run
     #======================================================
-    multi method flush-run() {
+    #| Flushes the transitions over chains of state connections that
+    #| do not requires user input.
+    multi method flush-react() {
 
         # Localize state object
         my Str $stateID = self.currentStateID;
@@ -40,14 +43,15 @@ role DSL::FiniteStateMachines::FSMMessaging {
 
         # Run the actions
         $stateID = self.choose-transition($stateID, Whatever);
-        self.ECHOLOGGING.("\t", "flush run new:", (:$stateID));
+        self.ECHOLOGGING.("\t", "flush reaction new: ", (:$stateID));
 
         self.currentStateID = $stateID;
 
-        return self.flush-run();
+        return self.flush-react();
     }
 
-    multi method message-run(Str $input) {
+    #| Main reaction function.
+    multi method react-to(Str $input) {
 
         # Check if end-session is reached
         if self.currentStateID eq 'None' {
@@ -98,7 +102,7 @@ role DSL::FiniteStateMachines::FSMMessaging {
             self.currentStateID = $state.id;
         }
 
-        return self.flush-run();
+        return self.flush-react();
     }
 
 }
