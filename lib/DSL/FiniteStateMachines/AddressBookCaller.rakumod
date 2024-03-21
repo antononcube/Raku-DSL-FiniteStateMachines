@@ -154,12 +154,12 @@ class DSL::FiniteStateMachines::AddressBookCaller
         #--------------------------------------------------------
         # States
         #--------------------------------------------------------
-        self.add-state("WaitForCallCommand", -> $obj { say "🔊 PLEASE enter call request."; });
-        self.add-state("WaitForRequest",     -> $obj { say "🔊 PLEASE enter item request."; });
+        self.add-state("WaitForCallCommand", -> $obj { say "🔊 PLEASE enter call request."; }, True);
+        self.add-state("WaitForRequest",     -> $obj { say "🔊 PLEASE enter item request."; }, True);
         self.add-state("ListOfItems",        -> $obj { say "🔊 LISTING items."; });
         self.add-state("PrioritizedList",    -> $obj { say "🔊 PRIORITIZED items."; });
         self.add-state("AcquireItem",        -> $obj { say "🔊 ACQUIRE item: ", $obj.dataset[0]; });
-        self.add-state("ActOnItem",          -> $obj { say "🔊 ACT ON item: ", $obj.dataset[0]; });
+        self.add-state("ActOnItem",          -> $obj { say "🔊 ACT ON item: ", $obj.dataset[0]; }, True);
         self.add-state("Help",               -> $obj { say "🔊 HELP is help..."; });
         self.add-state("Exit",               -> $obj { say "🔊 SHUTTING down..."; });
 
