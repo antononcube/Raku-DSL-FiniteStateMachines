@@ -7,7 +7,7 @@ role DSL::FiniteStateMachines::FSMMessaging {
 
         # Check state
         if self.states{$initID}:!exists {
-            self.re-warn.( "Unknown initial state ID: ⎡$initID⎦" );
+            self.re-warn.("Unknown initial state ID: ⎡$initID⎦");
             return Nil;
         }
 
@@ -19,7 +19,41 @@ role DSL::FiniteStateMachines::FSMMessaging {
     #======================================================
     # Message run
     #======================================================
-    method message-run(Str $input) {
+    multi method flush-run() {
+
+        # Localize state object
+        my Str $stateID = self.currentStateID;
+        my $state = self.states{$stateID};
+
+        # State check
+        without $state {
+            # die "No state for ⎡$stateID⎦" unless $state eq 'None';
+            return $stateID;
+        }
+
+        if $state.with-input {
+            # Just return it
+            return $stateID;
+        }
+
+        # No input is expected
+
+        # Run the actions
+        $stateID = self.choose-transition($stateID, Whatever);
+        self.ECHOLOGGING.("\t", "flush run new:", (:$stateID));
+
+        self.currentStateID = $stateID;
+
+        return self.flush-run();
+    }
+
+    multi method message-run(Str $input) {
+
+        # Check if end-session is reached
+        if self.currentStateID eq 'None' {
+            note 'FSM run has reached ⎡None⎦.';
+            return 'None';
+        }
 
         # Localize state object
         my Str $stateID = self.currentStateID;
@@ -29,52 +63,42 @@ role DSL::FiniteStateMachines::FSMMessaging {
         # Run the message
         #--------------------------------------------------
 
-        if so $state {
-            self.ECHOLOGGING.("\t", '$state.id' => $state.id);
-            self.ECHOLOGGING.("\t", '$state.Str' => $state.Str);
-        } else {
-            self.ECHOLOGGING.("\t", '$state => Nil');
-        }
+        # State check
+        without $state { die "No state for ⎡$stateID⎦" }
 
-        # Execute the action
-        $state.action.(self) if so $state;
+        self.ECHOLOGGING.("\t", '$state.id' => $state.id);
+        self.ECHOLOGGING.("\t", '$state.Str' => $state.Str);
 
-        without $state { die 'no state' }
+        # Execute state's action
+        # Note that the _real_ state action is programmed with choose-transition(...).
+        $state.action.(self);
 
-        if $state and so $state.implicitNext {
+        # Transition
+        if $state.implicitNext {
             # Switch with implicit state
 
-            self.ECHOLOGGING.( "\t", '$state.implicitNext => ', $state.implicitNext);
-            $stateID = $state.implicitNext;
-            $state = self.states{$stateID};
+            self.ECHOLOGGING.("\t", '$state.implicitNext => ', $state.implicitNext);
+            self.currentStateID = $state.implicitNext;
 
-        } elsif $state.explicitNext and $state.explicitNext.elems > 0 {
+        } elsif $state.explicitNext && $state.explicitNext.elems > 0 {
             # Switch to explicit state
 
-            self.ECHOLOGGING.("\t", '$state.explicitNext.Str' => $state.explicitNext.raku );
-            self.ECHOLOGGING.("\t", '$inputs.Str' => $input.raku );
+            self.ECHOLOGGING.("\t", '$state.explicitNext.Str' => $state.explicitNext.raku);
+            self.ECHOLOGGING.("\t", '$input.Str' => $input.raku);
 
+            # Run the actions
             $stateID = self.choose-transition($state.id, $input);
-            self.ECHOLOGGING.("\t" , "new ", '$stateID' => $stateID );
+            self.ECHOLOGGING.("\t", "new ", (:$stateID));
 
-            $state = self.states{$stateID}
+            self.currentStateID = $stateID;
+            $state = self.states{$stateID};
 
         } else {
+            self.ECHOLOGGING.("\t", "no change", '$stateID' => $stateID);
             self.currentStateID = $state.id;
-            return True;
         }
 
-        self.ECHOLOGGING.("\tsingle message processing end : ", '$inputs.Str' => $input );
-        if so $state {
-            self.ECHOLOGGING.("\tsingle message processing end : ", '$state.Str' => $state.Str);
-            self.ECHOLOGGING.("\tsingle message processing end : ", '$state.implicitNext.so' => $state.implicitNext.so);
-        } else {
-            self.ECHOLOGGING.("\tsingle message processing end : ", '$state => Nil');
-        }
-        #--------------------------------------------------
-
-        self.currentStateID = $state.id;
-        return True;
+        return self.flush-run();
     }
 
 }
