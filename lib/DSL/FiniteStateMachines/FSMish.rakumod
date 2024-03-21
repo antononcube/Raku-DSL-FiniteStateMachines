@@ -9,6 +9,25 @@
 #===========================================================
 
 #-----------------------------------------------------------
+# Instead of having an &.action callable attribute in DSL::FiniteStateMachines::State
+# it is better to have a method. But this brings "deep"
+# design implications.
+
+# The core design question is given in two parts:
+# - Do the states navigate/traverse the state graph themselves?
+#   XOR
+# - Does the FSM does "global planning" run?
+
+# The current, implemented design uses the latter:
+# 1) The FSM object has the state-transition graph.
+# 2) The FSM object knows how to react for given inputs given a state.
+# 3) There is multi method chose-transition($stateID, ...) .
+#   - The multi-dispatch happens over the first argument ($stateID).
+# 4) There is an FSM method run($input, ...) that traverses the FSM graph.
+
+# It seems that $.implicitNext is redundant.
+
+#-----------------------------------------------------------
 class DSL::FiniteStateMachines::State {...}
 class DSL::FiniteStateMachines::Transition {...}
 
@@ -16,6 +35,7 @@ class DSL::FiniteStateMachines::Transition {...}
 class DSL::FiniteStateMachines::State {
     has Str $.id;
     has &.action;
+    has Bool $.with-input = False;
     has Str $.implicitNext is rw;
     has DSL::FiniteStateMachines::Transition @.explicitNext;
 
@@ -99,8 +119,13 @@ role DSL::FiniteStateMachines::FSMish {
     has &.ECHOLOGGING is rw = &say;
 
     #------------------------------------------------------
-    method add-state(Str $id, &action) {
-        %!states{$id} = DSL::FiniteStateMachines::State.new(:$id, :&action);
+    multi method add-state(Str $id, &action, Bool $with-input = False) {
+        %!states{$id} = DSL::FiniteStateMachines::State.new(:$id, :&action, :$with-input);
+    }
+
+    #------------------------------------------------------
+    multi method add-state(DSL::FiniteStateMachines::State:D $st) {
+        %!states{$st.id} = $st;
     }
 
     #------------------------------------------------------
@@ -120,6 +145,11 @@ role DSL::FiniteStateMachines::FSMish {
     #------------------------------------------------------
     multi method add-transition(Str $from, Str $id, Str $to) {
         %!states{$from}.explicitNext.push: DSL::FiniteStateMachines::Transition.new(:$id, :$to);
+    }
+
+    #------------------------------------------------------
+    multi method add-transition(Str $from, DSL::FiniteStateMachines::Transition:D $trans) {
+        %!states{$from}.explicitNext.push: $trans;
     }
 
     #------------------------------------------------------
