@@ -88,6 +88,11 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
             # return 'PriorityList';
             return self.transition-target(@transitions, 'saveData');
 
+        } elsif $pres<global-command><global-repeat-last> {
+
+            # return 'RepeatLast';
+            return self.transition-target(@transitions, 'repeatLast');
+
         } elsif so $pres<global-command> {
 
             $.re-warn.("$stateID: No implemented reaction for the given global command input.");
@@ -262,6 +267,20 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
     }
 
     #--------------------------------------------------------
+    multi method choose-transition(Str $stateID where $_ ~~ 'RepeatLast',
+                                   $input is copy = Whatever, UInt $maxLoops = 5 --> Str) {
+        # Get next transitions
+        my DSL::FiniteStateMachines::Transition @transitions = %.states{$stateID}.explicitNext;
+
+        # Prompt selection menu
+        &.re-say.('Repeating last answer:');
+        &.re-say.(to-pretty-table($!dataset, field-names => self.datasetColumnNames));
+
+        # Goto Exit state or stay
+        return self.transition-target(@transitions, 'continue');;
+    }
+
+    #--------------------------------------------------------
     multi method choose-transition(Str $stateID where $_ ~~ 'PrioritizedList',
                                    $input is copy = Whatever, UInt $maxLoops = 5 --> Str) {
 
@@ -336,6 +355,7 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
         self.add-state("ListOfItems",      -> $obj { say "🔊 LISTING items."; });
         self.add-state("PrioritizedList",  -> $obj { say "🔊 PRIORITIZED items."; });
         self.add-state("UnknownCommand",   -> $obj { say "🔊 UNKNOWN COMMAND."; });
+        self.add-state("RepeatLast",       -> $obj { say "🔊 REPEAT last result."; });
         self.add-state("ExportRecords",    -> $obj { say "🔊 EXPORT records: ", $obj.dataset; });
         self.add-state("AcquireItem",      -> $obj { say "🔊 ACQUIRE item: ", $obj.dataset[0]; });
         self.add-state("ActOnItem",        -> $obj { say "🔊 ACT ON item: ", $obj.dataset[0]; });
@@ -349,12 +369,14 @@ role DSL::FiniteStateMachines::QueryRetrieveActFSMRole
         self.add-transition("WaitForRequest",   "startOver",          "WaitForRequest");
         self.add-transition("WaitForRequest",   "prioritize",         "PrioritizedList");
         self.add-transition("WaitForRequest",   "saveData",           "ExportRecords");
+        self.add-transition("WaitForRequest",   "repeatLast",         "RepeatLast");
         self.add-transition("WaitForRequest",   "unparsed",           "UnknownCommand");
         self.add-transition("WaitForRequest",   "help",               "Help");
         self.add-transition("WaitForRequest",   "quit",               "Exit");
 
         self.add-transition("PrioritizedList",  "priorityListGiven",  "WaitForRequest");
         self.add-transition("UnknownCommand",   "continue",           "WaitForRequest");
+        self.add-transition("RepeatLast",       "continue",           "WaitForRequest");
 
         self.add-transition("ListOfItems",      "manyItems",          "WaitForRequest");
         self.add-transition("ListOfItems",      "noItems",            "WaitForRequest");

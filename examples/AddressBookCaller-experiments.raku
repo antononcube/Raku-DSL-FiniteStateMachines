@@ -48,4 +48,4 @@ $abcFSM.make-machine(($resourceObj,));
 
 # Run the FSM with a list of commands:
 #$abcFSM.run('WaitForCallCommand', ["call an actor from LOTR", "", "take last three", "", "quit"]);
-$abcFSM.run('WaitForCallCommand', ["call an actor from LOTR", "", "take last three", "", "take the second", "", "", "2", "5", "", "quit"]);
+$abcFSM.run('WaitForCallCommand', ["call an actor from LOTR", "", "take last three", "", "repeat last", "", "take the second", "", "", "2", "5", "", "quit"]);

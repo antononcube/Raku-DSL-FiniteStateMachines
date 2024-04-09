@@ -158,6 +158,8 @@ class DSL::FiniteStateMachines::AddressBookCaller
         self.add-state("WaitForRequest",     -> $obj { say "🔊 PLEASE enter item request."; }, True);
         self.add-state("ListOfItems",        -> $obj { say "🔊 LISTING items."; });
         self.add-state("PrioritizedList",    -> $obj { say "🔊 PRIORITIZED items."; });
+        self.add-state("UnknownCommand",     -> $obj { say "🔊 UNKNOWN COMMAND."; });
+        self.add-state("RepeatLast",         -> $obj { say "🔊 REPEAT last result."; });
         self.add-state("AcquireItem",        -> $obj { say "🔊 ACQUIRE item: ", $obj.dataset[0]; });
         self.add-state("ActOnItem",          -> $obj { say "🔊 ACT ON item: ", $obj.dataset[0]; }, True);
         self.add-state("Help",               -> $obj { say "🔊 HELP is help..."; });
@@ -168,14 +170,17 @@ class DSL::FiniteStateMachines::AddressBookCaller
         #--------------------------------------------------------
         self.add-transition("WaitForCallCommand", "translated",         "WaitForRequest");
         self.add-transition("WaitForCallCommand", "unchanged",          "WaitForRequest");
-
         self.add-transition("WaitForRequest",     "itemSpec",           "ListOfItems");
         self.add-transition("WaitForRequest",     "startOver",          "WaitForRequest");
+        self.add-transition("WaitForRequest",     "unparsed",           "UnknownCommand");
+        self.add-transition("WaitForRequest",     "repeatLast",         "RepeatLast");
         self.add-transition("WaitForRequest",     "prioritize",         "PrioritizedList");
         self.add-transition("WaitForRequest",     "help",               "Help");
         self.add-transition("WaitForRequest",     "quit",               "Exit");
 
         self.add-transition("PrioritizedList",    "priorityListGiven",  "WaitForCallCommand");
+        self.add-transition("UnknownCommand",     "continue",           "WaitForRequest");
+        self.add-transition("RepeatLast",         "continue",           "WaitForRequest");
 
         self.add-transition("ListOfItems",        "manyItems",          "WaitForCallCommand");
         self.add-transition("ListOfItems",        "noItems",            "WaitForCallCommand");
